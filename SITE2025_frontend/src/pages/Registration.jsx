@@ -53,71 +53,54 @@ const Registration = () => {
   const handleRegisterNow = () => {
     navigate('/registration-form')
   }
+const registrationTypes = [
+  {
+    id: "person-no-hotel",
+    type: "Person Registration (No Hotel)",
+    icon: <FaUsers />,
+    earlyBird: "450 DT",
+    regular: "600 DT",
+    description: "For persons attending the conference without hotel accommodation",
+    includes: [
+      "Conference attendance (2 days)",
+      "Conference materials & bag",
+      "Coffee breaks & refreshments",
+      "Lunch (2 days)",
+      "Access to poster sessions",
+      "Certificate of participation",
+      "WiFi access"
+    ]
+  },
+  {
+    id: "person-single-room",
+    type: "Person Registration + Single Hotel Room",
+    icon: <FaBuilding />,
+    earlyBird: "900 DT",
+    regular: "1100 DT",
+    description: "Conference attendance with single room hotel accommodation in Hammamet (2 nights)",
+    includes: [
+      "All benefits of Person Registration (No Hotel)",
+      "Single room hotel accommodation (2 nights)",
+      "Breakfast included",
+      "Local transportation to venue"
+    ]
+  },
+  {
+    id: "person-double-room",
+    type: "Person Registration + Double Hotel Room (Shared)",
+    icon: <FaUsers />,
+    earlyBird: "650 DT",
+    regular: "800 DT",
+    description: "Conference attendance with shared double room hotel accommodation (2 nights)",
+    includes: [
+      "All benefits of Person Registration (No Hotel)",
+      "Shared double room hotel accommodation (2 nights)",
+      "Breakfast included",
+      "Local transportation to venue"
+    ]
+  }
+]
 
-  const registrationTypes = [
-    {
-      id: "student",
-      type: "Student Registration",
-      icon: <FaGraduationCap />,
-      earlyBird: "150€",
-      regular: "200€",
-      popular: false,
-      description: "For full-time students with valid student ID",
-      includes: [
-        "Conference attendance (2 days)",
-        "Conference materials & bag",
-        "Coffee breaks & refreshments",
-        "Lunch (2 days)",
-        "Access to poster sessions",
-        "Certificate of participation",
-        "WiFi access"
-      ]
-    },
-    {
-      id: "academic",
-      type: "Academic Registration",
-      icon: <FaUsers />,
-      earlyBird: "250€",
-      regular: "300€",
-      popular: true,
-      description: "For researchers, professors, and academic staff",
-      includes: [
-        "Conference attendance (2 days)",
-        "Conference materials & bag",
-        "Coffee breaks & refreshments",
-        "Lunch (2 days)",
-        "Welcome reception",
-        "Access to poster sessions",
-        "Networking events",
-        "Certificate of participation",
-        "WiFi access",
-        "Proceedings (digital)"
-      ]
-    },
-    {
-      id: "industry",
-      type: "Industry Registration",
-      icon: <FaBuilding />,
-      earlyBird: "350€",
-      regular: "400€",
-      popular: false,
-      description: "For industry professionals and practitioners",
-      includes: [
-        "Conference attendance (2 days)",
-        "Conference materials & bag",
-        "Coffee breaks & refreshments",
-        "Lunch (2 days)",
-        "Welcome reception",
-        "Access to poster sessions",
-        "Networking events",
-        "Industry panel access",
-        "Certificate of participation",
-        "WiFi access",
-        "Proceedings (digital & print)",
-        "Priority seating"
-      ]
-    }
-  ]
 
   // Generate important dates based on registration open and close dates
   const generateImportantDates = () => {

@@ -1,5 +1,4 @@
 import React from 'react'
-import ScrollAnimation from './ScrollAnimation'
 import './Partners.css'
 
 const Partners = () => {
@@ -13,7 +12,7 @@ const Partners = () => {
     { id: 7, src: "https://site-conf.com/wp-content/uploads/2025/05/7.png", alt: "Partner 7" },
     { id: 8, src: "https://site-conf.com/wp-content/uploads/2025/05/10.png", alt: "Partner 10" },
     { id: 9, src: "https://site-conf.com/wp-content/uploads/2025/06/partners-150x150.png", alt: "Partners" },
-    { id: 10, src: "https://site-conf.com/wp-content/uploads/2025/05/8.png", alt: "Partner 8" },
+    { id: 10, src: "https://site-conf.com/wp-content/uploads/2025/05/4.png", alt: "Partner 4" },
     { id: 11, src: "https://site-conf.com/wp-content/uploads/2025/06/13-150x150.png", alt: "Partner 13" },
     { id: 12, src: "https://site-conf.com/wp-content/uploads/2025/06/14-150x150.png", alt: "Partner 14" },
     { id: 13, src: "https://site-conf.com/wp-content/uploads/2025/06/15-150x150.png", alt: "Partner 15" },
@@ -22,30 +21,29 @@ const Partners = () => {
     { id: 16, src: "https://site-conf.com/wp-content/uploads/2025/06/18-150x150.png", alt: "Partner 18" },
     { id: 17, src: "https://site-conf.com/wp-content/uploads/2025/06/19-150x150.png", alt: "Partner 19" },
     { id: 18, src: "https://site-conf.com/wp-content/uploads/2025/06/20-150x150.png", alt: "Partner 20" },
-    { id: 19, src: "https://site-conf.com/wp-content/uploads/2025/05/4.png", alt: "Partner 4" },
+    { id: 19, src: "https://site-conf.com/wp-content/uploads/2025/05/8.png", alt: "Partner 8" },
     { id: 20, src: "https://site-conf.com/wp-content/uploads/2025/05/12.png", alt: "Partner 12" }
   ]
 
+  // Duplicate for infinite scroll effect
+  const all = [...partners, ...partners]
+
   return (
-    <section className="partners-section section">
-      <div className="container">
-        <ScrollAnimation>
-          <h2 className="section-title gradient-text">Partners & Sponsors</h2>
-        </ScrollAnimation>
-        <ScrollAnimation delay={200}>
-          <div className="partners-grid">
-            {partners.map((partner, index) => (
-              <ScrollAnimation key={partner.id} delay={300 + index * 50}>
-                <div className="partner-item">
-                  <img src={partner.src} alt={partner.alt} />
-                </div>
-              </ScrollAnimation>
-            ))}
-          </div>
-        </ScrollAnimation>
+    <section className="partners-section">
+      <h2 className="section-title">Partners & Sponsors</h2>
+      <div className="carousel-wrapper">
+        <div className="carousel-track">
+          {all.map((partner, index) => (
+            <div className="carousel-item" key={index}>
+              <img src={partner.src} alt={partner.alt} />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   )
 }
 
 export default Partners
+
+
