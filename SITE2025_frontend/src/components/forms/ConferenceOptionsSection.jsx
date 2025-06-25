@@ -24,6 +24,11 @@ const ConferenceOptionsSection = ({ formData, errors, onChange }) => {
   const calculateTotalFee = () => {
     let total = 0
 
+    // Only calculate if required fields are selected
+    if (!formData.participantCategory || formData.fromTunisia === undefined) {
+      return 0
+    }
+
     // Base registration fee
     if (formData.withAccommodation) {
       const categoryFees = registrationFees.withAccommodation[formData.participantCategory]
@@ -91,10 +96,25 @@ const ConferenceOptionsSection = ({ formData, errors, onChange }) => {
 
   // Update total whenever relevant form data changes
   useEffect(() => {
+    // If user switches to Tunisia, disable airport transfer
+    if (formData.fromTunisia === true && formData.airportTransfer) {
+      onChange({
+        target: {
+          name: 'airportTransfer',
+          value: false
+        }
+      })
+    }
+
     const total = calculateTotalFee()
-    const currency = (!formData.withAccommodation || formData.fromTunisia) ? 'TND' :
-                    (formData.airportTransfer && !formData.withAccommodation) ? 'EUR' :
-                    formData.fromTunisia ? 'TND' : 'EUR'
+
+    // Only set currency if we have a valid calculation
+    let currency = 'TND' // Default currency
+    if (total > 0) {
+      currency = (!formData.withAccommodation || formData.fromTunisia) ? 'TND' :
+                 (formData.airportTransfer && !formData.withAccommodation) ? 'EUR' :
+                 formData.fromTunisia ? 'TND' : 'EUR'
+    }
 
     onChange({
       target: {
@@ -233,18 +253,21 @@ const ConferenceOptionsSection = ({ formData, errors, onChange }) => {
       </div>
 
       {/* Additional Services */}
-      <div className="checkbox-group">
-        <input
-          type="checkbox"
-          id="airportTransfer"
-          name="airportTransfer"
-          checked={formData.airportTransfer}
-          onChange={onChange}
-        />
-        <label htmlFor="airportTransfer">
-          I need airport transfer (Tunis Carthage Airport ↔ hotel) - 50 €
-        </label>
-      </div>
+      {/* Airport Transfer - Only for people from outside Tunisia */}
+      {formData.fromTunisia === false && (
+        <div className="checkbox-group">
+          <input
+            type="checkbox"
+            id="airportTransfer"
+            name="airportTransfer"
+            checked={formData.airportTransfer}
+            onChange={onChange}
+          />
+          <label htmlFor="airportTransfer">
+            I need airport transfer (Tunis Carthage Airport ↔ hotel) - 50 €
+          </label>
+        </div>
+      )}
 
       <div className="checkbox-group">
         <input

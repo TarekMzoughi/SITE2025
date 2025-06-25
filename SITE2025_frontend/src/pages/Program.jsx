@@ -1,353 +1,143 @@
-import React from 'react'
-import { FaClock, FaMapMarkerAlt, FaUsers, FaMicrophone, FaCoffee, FaUtensils } from 'react-icons/fa'
-import './Pages.css'
+import React, { useState, useEffect } from 'react';
+import { FaCalendarAlt, FaClock, FaMapMarkerAlt, FaMicrophone, FaUsers, FaStar, FaRocket, FaLightbulb, FaGraduationCap } from 'react-icons/fa';
+import './Program_bright.css';
 
 const Program = () => {
-  const keynoteSpeekers = [
-    {
-      name: "Prof. Dr. Ahmed BENALI",
-      title: "Smart Manufacturing in Industry 4.0",
-      affiliation: "University of Technology, Tunisia",
-      time: "Day 1 - 09:30",
-      image: "https://via.placeholder.com/150x150/1e40af/ffffff?text=AB"
-    },
-    {
-      name: "Dr. Marie DUBOIS",
-      title: "Sustainable Technologies for Environmental Protection",
-      affiliation: "Sorbonne University, France",
-      time: "Day 2 - 09:30",
-      image: "https://via.placeholder.com/150x150/0891b2/ffffff?text=MD"
-    }
-  ]
+  const speakersData = [
+    { name: 'Speaker 2', title: 'CEO', topic: 'Smart factory' },
+    { name: 'Speaker 1', title: 'Professor', topic: 'Mechanical Engineering' },
+    { name: 'Speaker 3', title: 'Professor', topic: 'Big Data & Security' },
+    { name: 'Speaker', title: 'Digital Marketing', topic: 'Marketing' },
+  ];
 
-  const programSchedule = [
-    {
-      day: "Day 1",
-      date: "March 15, 2025",
-      theme: "Smart Industry & Technology",
-      sessions: [
-        {
-          time: "08:30 - 09:00",
-          title: "Registration & Welcome Coffee",
-          type: "registration",
-          location: "Main Hall",
-          icon: <FaCoffee />
-        },
-        {
-          time: "09:00 - 09:15",
-          title: "Opening Ceremony",
-          type: "ceremony",
-          location: "Conference Hall A",
-          speaker: "Conference Chair",
-          icon: <FaMicrophone />
-        },
-        {
-          time: "09:15 - 10:15",
-          title: "Keynote 1: Smart Manufacturing in Industry 4.0",
-          type: "keynote",
-          location: "Conference Hall A",
-          speaker: "Prof. Dr. Ahmed BENALI",
-          icon: <FaMicrophone />
-        },
-        {
-          time: "10:15 - 10:45",
-          title: "Coffee Break & Networking",
-          type: "break",
-          location: "Exhibition Area",
-          icon: <FaCoffee />
-        },
-        {
-          time: "10:45 - 12:15",
-          title: "Session 1A: Smart Industry Technologies",
-          type: "session",
-          location: "Conference Hall A",
-          papers: 6,
-          icon: <FaUsers />
-        },
-        {
-          time: "10:45 - 12:15",
-          title: "Session 1B: IoT and Smart Systems",
-          type: "session",
-          location: "Conference Hall B",
-          papers: 6,
-          icon: <FaUsers />
-        },
-        {
-          time: "12:15 - 13:45",
-          title: "Lunch Break",
-          type: "break",
-          location: "Restaurant Area",
-          icon: <FaUtensils />
-        },
-        {
-          time: "13:45 - 15:15",
-          title: "Session 2A: Artificial Intelligence",
-          type: "session",
-          location: "Conference Hall A",
-          papers: 6,
-          icon: <FaUsers />
-        },
-        {
-          time: "13:45 - 15:15",
-          title: "Session 2B: Environmental Technologies",
-          type: "session",
-          location: "Conference Hall B",
-          papers: 6,
-          icon: <FaUsers />
-        },
-        {
-          time: "15:15 - 15:45",
-          title: "Coffee Break",
-          type: "break",
-          location: "Exhibition Area",
-          icon: <FaCoffee />
-        },
-        {
-          time: "15:45 - 17:15",
-          title: "Poster Session & Networking",
-          type: "poster",
-          location: "Exhibition Area",
-          papers: 25,
-          icon: <FaUsers />
-        }
-      ]
-    },
-    {
-      day: "Day 2",
-      date: "March 16, 2025",
-      theme: "Environment & Sustainability",
-      sessions: [
-        {
-          time: "09:00 - 09:30",
-          title: "Welcome Coffee",
-          type: "registration",
-          location: "Main Hall",
-          icon: <FaCoffee />
-        },
-        {
-          time: "09:30 - 10:30",
-          title: "Keynote 2: Sustainable Technologies for Environmental Protection",
-          type: "keynote",
-          location: "Conference Hall A",
-          speaker: "Dr. Marie DUBOIS",
-          icon: <FaMicrophone />
-        },
-        {
-          time: "10:30 - 11:00",
-          title: "Coffee Break",
-          type: "break",
-          location: "Exhibition Area",
-          icon: <FaCoffee />
-        },
-        {
-          time: "11:00 - 12:30",
-          title: "Session 3A: Renewable Energy Systems",
-          type: "session",
-          location: "Conference Hall A",
-          papers: 6,
-          icon: <FaUsers />
-        },
-        {
-          time: "11:00 - 12:30",
-          title: "Session 3B: Smart Cities & Urban Planning",
-          type: "session",
-          location: "Conference Hall B",
-          papers: 6,
-          icon: <FaUsers />
-        },
-        {
-          time: "12:30 - 14:00",
-          title: "Lunch Break",
-          type: "break",
-          location: "Restaurant Area",
-          icon: <FaUtensils />
-        },
-        {
-          time: "14:00 - 15:30",
-          title: "Session 4A: Sustainable Development",
-          type: "session",
-          location: "Conference Hall A",
-          papers: 6,
-          icon: <FaUsers />
-        },
-        {
-          time: "14:00 - 15:30",
-          title: "Session 4B: Green Technologies",
-          type: "session",
-          location: "Conference Hall B",
-          papers: 6,
-          icon: <FaUsers />
-        },
-        {
-          time: "15:30 - 16:00",
-          title: "Coffee Break",
-          type: "break",
-          location: "Exhibition Area",
-          icon: <FaCoffee />
-        },
-        {
-          time: "16:00 - 17:00",
-          title: "Panel Discussion: Future of Smart Industry",
-          type: "panel",
-          location: "Conference Hall A",
-          panelists: 5,
-          icon: <FaUsers />
-        },
-        {
-          time: "17:00 - 17:30",
-          title: "Closing Ceremony & Awards",
-          type: "ceremony",
-          location: "Conference Hall A",
-          icon: <FaMicrophone />
-        }
-      ]
-    }
-  ]
+  const scheduleData = {
+    'October 24': [
+      { time: '14h-15h', event: 'Opening Ceremony' },
+      { time: '15h-15h30', event: 'Coffee Break' },
+      { time: '15h30-17h', event: 'Plenary Session 1' },
+    ],
+    'October 25': [
+      { time: '9h-10h', event: 'Oral Session 2' },
+      { time: '10h-10h30', event: 'Plenary Session 3' },
+      { time: '10h30-12h30', event: 'Oral Session 1' },
+      { time: '12h30-14:00', event: 'Coffee Break' },
+      { time: '14h - 15h', event: 'Plenary Session 2' },
+      { time: '15h-15h30', event: 'Lunch Break' },
+    ],
+    'October 26': [
+      { time: '9h-10h', event: 'Special Talk: Event Expert at Multi Conference – Yellow Hall' },
+      { time: '10h30-12h', event: 'Panel Discussion: Future of Smart Tech' },
+      { time: '12h30-14:00', event: 'Coffee Break' },
+    ],
+    'Special Session': [
+      { time: 'Soon', event: 'To Be Announced' },
+    ],
+  };
+
+  const [activeTab, setActiveTab] = useState('October 24');
+  const activeSessions = scheduleData[activeTab] || [];
 
   return (
-    <div className="page-container program-page">
-      <div className="container">
-        <div className="page-header">
-          <h1>Conference Program</h1>
-          <p className="page-subtitle">SITE 2025 - Smart Industry, Technology and Environment</p>
-        </div>
-
-        <div className="page-content">
-          {/* Conference Overview */}
-          <div className="program-overview">
-            <div className="overview-stats">
-              <div className="stat-card">
-                <div className="stat-number">2</div>
-                <div className="stat-label">Days</div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-number">2</div>
-                <div className="stat-label">Keynotes</div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-number">8</div>
-                <div className="stat-label">Sessions</div>
-              </div>
-              <div className="stat-card">
-                <div className="stat-number">50+</div>
-                <div className="stat-label">Papers</div>
-              </div>
+    <div className="program-page">
+      <div className="page-container">
+        <div className="program-hero">
+          <h1 className="hero-title">SITE 2025 Conference Program</h1>
+          <p className="hero-subtitle">Join us for an extraordinary journey of innovation, learning, and networking with industry leaders and cutting-edge technology</p>
+          <div className="hero-stats">
+            <div className="stat-item">
+              <FaGraduationCap className="stat-icon" />
+              <span className="stat-number">4+</span>
+              <span className="stat-label">Expert Speakers</span>
+            </div>
+            <div className="stat-item">
+              <FaCalendarAlt className="stat-icon" />
+              <span className="stat-number">3</span>
+              <span className="stat-label">Conference Days</span>
+            </div>
+            <div className="stat-item">
+              <FaRocket className="stat-icon" />
+              <span className="stat-number">10+</span>
+              <span className="stat-label">Innovation Sessions</span>
+            </div>
+            <div className="stat-item">
+              <FaLightbulb className="stat-icon" />
+              <span className="stat-number">∞</span>
+              <span className="stat-label">Ideas & Insights</span>
             </div>
           </div>
+        </div>
 
-          {/* Keynote Speakers */}
-          <div className="keynote-speakers">
-            <h2 className="section-title">Keynote Speakers</h2>
-            <div className="speakers-grid">
-              {keynoteSpeekers.map((speaker, index) => (
-                <div key={index} className="speaker-card">
-                  <div className="speaker-image">
-                    <img src={speaker.image} alt={speaker.name} />
+        <div className="speakers-section">
+          <div className="section-header">
+            <h2 className="section-title">
+              <FaStar className="title-icon" />
+              Our Distinguished Speakers
+            </h2>
+            <p className="section-subtitle">Meet the industry experts who will share their insights</p>
+          </div>
+          <div className="speakers-grid">
+            {speakersData.map((speaker, index) => (
+              <div key={index} className="speaker-card">
+                <div className="speaker-image-container">
+                  <img
+                    src="/site 2025 (5).png"
+                    alt="SITE 2025 Conference Logo"
+                    className="speaker-logo"
+                  />
+                </div>
+                <div className="speaker-info">
+                  <h3>{speaker.name}</h3>
+                  <p className="speaker-title">{speaker.title}</p>
+                  <div className="speaker-topic">
+                    <FaMapMarkerAlt className="topic-icon" />
+                    {speaker.topic}
                   </div>
-                  <div className="speaker-info">
-                    <h3>{speaker.name}</h3>
-                    <h4>{speaker.title}</h4>
-                    <p>{speaker.affiliation}</p>
-                    <div className="speaker-time">
-                      <FaClock /> {speaker.time}
-                    </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="schedule-section">
+          <div className="section-header">
+            <h2 className="section-title">
+              <FaCalendarAlt className="title-icon" />
+              Program Schedule
+            </h2>
+            <p className="section-subtitle">Plan your conference experience day-by-day</p>
+          </div>
+
+          <div className="schedule-container">
+            <div className="schedule-tabs">
+              {Object.keys(scheduleData).map((day) => (
+                <button
+                  key={day}
+                  className={`tab-item ${activeTab === day ? 'active' : ''}`}
+                  onClick={() => setActiveTab(day)}
+                >
+                  <FaCalendarAlt className="tab-icon" />
+                  {day}
+                </button>
+              ))}
+            </div>
+
+            <div className="schedule-content">
+              {activeSessions.map((session, index) => (
+                <div key={index} className="session-item">
+                  <div className="session-time">
+                    <FaClock /> {session.time}
+                  </div>
+                  <div className="session-event">
+                    <FaMicrophone /> {session.event}
                   </div>
                 </div>
               ))}
             </div>
           </div>
-
-          {/* Program Schedule */}
-          <div className="program-schedule">
-            <h2 className="section-title">Detailed Program</h2>
-
-            {programSchedule.map((day, dayIndex) => (
-              <div key={dayIndex} className="day-program">
-                <div className="day-header">
-                  <div className="day-info">
-                    <h3>{day.day}</h3>
-                    <p className="day-date">{day.date}</p>
-                    <p className="day-theme">{day.theme}</p>
-                  </div>
-                </div>
-
-                <div className="sessions-timeline">
-                  {day.sessions.map((session, sessionIndex) => (
-                    <div key={sessionIndex} className={`session-card ${session.type}`}>
-                      <div className="session-time">
-                        <FaClock />
-                        <span>{session.time}</span>
-                      </div>
-                      <div className="session-content">
-                        <div className="session-icon">
-                          {session.icon}
-                        </div>
-                        <div className="session-details">
-                          <h4>{session.title}</h4>
-                          {session.speaker && (
-                            <p className="session-speaker">
-                              <FaMicrophone /> {session.speaker}
-                            </p>
-                          )}
-                          {session.location && (
-                            <p className="session-location">
-                              <FaMapMarkerAlt /> {session.location}
-                            </p>
-                          )}
-                          {session.papers && (
-                            <p className="session-papers">
-                              <FaUsers /> {session.papers} papers
-                            </p>
-                          )}
-                          {session.panelists && (
-                            <p className="session-panelists">
-                              <FaUsers /> {session.panelists} panelists
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Important Information */}
-          <div className="program-info">
-            <div className="info-grid">
-              <div className="info-card">
-                <h3>Venue Information</h3>
-                <p>Institut Supérieur des Etudes Technologiques de Bizerte</p>
-                <p>ADT Bizerte, Tunisia</p>
-              </div>
-              <div className="info-card">
-                <h3>Registration</h3>
-                <p>On-site registration available from 08:30 on Day 1</p>
-                <p>Please bring your confirmation email</p>
-              </div>
-              <div className="info-card">
-                <h3>Networking</h3>
-                <p>Coffee breaks and lunch provide excellent networking opportunities</p>
-                <p>Poster session includes refreshments</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="program-note">
-            <h3>Important Notes</h3>
-            <ul>
-              <li>All times are local time (GMT+1)</li>
-              <li>Presentation slots are 15 minutes including Q&A</li>
-              <li>Poster boards are 120cm x 90cm (portrait orientation)</li>
-              <li>WiFi access will be provided throughout the venue</li>
-              <li>Lunch and coffee breaks are included in registration</li>
-            </ul>
-          </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Program
+export default Program;

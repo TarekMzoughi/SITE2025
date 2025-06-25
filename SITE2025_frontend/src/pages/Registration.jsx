@@ -6,8 +6,42 @@ import './Pages.css'
 const Registration = () => {
   const navigate = useNavigate()
 
+  // Check if registration is open (January 15, 2025) and closed (March 10, 2025)
+  const registrationOpenDate = new Date('2025-01-15')
+  const registrationCloseDate = new Date('2026-03-10')
+
+  const isRegistrationOpen = () => {
+    const currentDate = new Date()
+    return currentDate >= registrationOpenDate && currentDate <= registrationCloseDate
+  }
+
+  const isRegistrationClosed = () => {
+    const currentDate = new Date()
+    return currentDate > registrationCloseDate
+  }
+
+  // Format the registration open date for display
+  const formatRegistrationDate = () => {
+    return registrationOpenDate.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })
+  }
+
+  // Format the registration close date
+  const formatRegistrationCloseDate = () => {
+    return registrationCloseDate.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })
+  }
+
   const handleRegisterNow = () => {
-    navigate('/registration-form')
+    if (isRegistrationOpen()) {
+      navigate('/registration-form')
+    }
   }
 // Registration fee data
   const registrationWithAccommodation = [
@@ -201,14 +235,39 @@ const Registration = () => {
             <p><strong>Additional charges for Social Event:</strong> <strong>100 € / 50 TND</strong></p>
           </section>
 
-          {/* Register Now Button */}
-          <section className="registration-section" style={{ textAlign: 'center' }}>
-            <button
-              className="register-btn"
-              onClick={handleRegisterNow}
-            >
-              Register Now
-            </button>
+          {/* Registration Access */}
+          <section className="registration-access">
+            {isRegistrationClosed() ? (
+              <div className="access-card closed">
+                <h3>Registration Closed</h3>
+                <p>Registration closed on {formatRegistrationCloseDate()}</p>
+                <p>Registration is no longer available for this conference.</p>
+              </div>
+            ) : isRegistrationOpen() ? (
+              <div className="access-card open">
+                <h3>Registration is Open!</h3>
+                <p>Don't miss out - register now for SITE 2025</p>
+                <p className="deadline">Registration closes on {formatRegistrationCloseDate()}</p>
+                <button
+                  className="access-btn primary"
+                  onClick={handleRegisterNow}
+                >
+                  Start Registration
+                </button>
+              </div>
+            ) : (
+              <div className="access-card upcoming">
+                <h3>Registration Opening Soon</h3>
+                <p>Registration will open on {formatRegistrationDate()}</p>
+                <p>Get ready to secure your spot at SITE 2025</p>
+                <button
+                  className="access-btn disabled"
+                  disabled
+                >
+                  Coming Soon
+                </button>
+              </div>
+            )}
           </section>
 
           {/* Contact Information */}

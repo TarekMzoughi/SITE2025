@@ -1639,6 +1639,19 @@ div.form-section h3.section-title {
   box-shadow: var(--shadow-lg);
 }
 
+.register-btn.disabled {
+  background: var(--color-gray-400);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.register-btn.disabled:hover {
+  transform: none;
+  box-shadow: var(--shadow-md);
+}
+
+
+
 /* Registration Form Fee Calculation */
 .fee-calculation-section {
   margin-top: 2rem;
@@ -1856,6 +1869,103 @@ div.form-section h3.section-title {
   font-style: italic;
   margin: 0;
   line-height: 1.5;
+}
+
+/* Registration Access Section */
+.registration-access {
+  margin-top: 3rem;
+  display: flex;
+  justify-content: center;
+}
+
+.access-card {
+  max-width: 500px;
+  padding: 2.5rem;
+  border-radius: var(--radius-xl);
+  text-align: center;
+  border: 2px solid;
+  background: var(--color-white);
+}
+
+.access-card.open {
+  border-color: var(--color-success);
+  background: linear-gradient(135deg, rgba(5, 150, 105, 0.02), rgba(16, 185, 129, 0.05));
+}
+
+.access-card.closed {
+  border-color: var(--color-error);
+  background: linear-gradient(135deg, rgba(220, 38, 38, 0.02), rgba(239, 68, 68, 0.05));
+}
+
+.access-card.upcoming {
+  border-color: var(--color-brand-blue);
+  background: linear-gradient(135deg, rgba(30, 64, 175, 0.02), rgba(8, 145, 178, 0.05));
+}
+
+.access-card h3 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.access-card.open h3 {
+  color: var(--color-success);
+}
+
+.access-card.closed h3 {
+  color: var(--color-error);
+}
+
+.access-card.upcoming h3 {
+  color: var(--color-brand-blue);
+}
+
+.access-card p {
+  font-size: 1rem;
+  color: var(--color-gray-700);
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+
+.deadline {
+  font-weight: 600;
+  color: var(--color-warning) !important;
+  font-size: 0.9rem !important;
+}
+
+.access-btn {
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1.5rem;
+  min-width: 200px;
+}
+
+.access-btn.primary {
+  background: var(--color-success);
+  color: var(--color-white);
+}
+
+.access-btn.primary:hover {
+  background: #047857;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(5, 150, 105, 0.3);
+}
+
+.access-btn.disabled {
+  background: var(--color-gray-400);
+  color: var(--color-white);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.access-btn.disabled:hover {
+  transform: none;
+  box-shadow: none;
 }
 
 /* Honorary Committee Specific */
