@@ -8,7 +8,7 @@ const Committees = () => {
       title: "Honorary Committee",
       description: "Distinguished academics and industry leaders providing strategic guidance",
       link: "/honorary-committee",
-      members: "5 members",
+      members: "6 members",
       role: "Strategic guidance and academic standards"
     },
     {

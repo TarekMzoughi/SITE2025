@@ -1,5 +1,5 @@
 import React from 'react'
-import { FaCreditCard, FaBed, FaUpload } from 'react-icons/fa'
+import { FaCreditCard, FaUpload } from 'react-icons/fa'
 
 const PaymentInfoSection = ({ formData, errors, onChange }) => {
   const paymentMethods = [
@@ -14,55 +14,40 @@ const PaymentInfoSection = ({ formData, errors, onChange }) => {
         <FaCreditCard /> Payment Information
       </h3>
       
-      <div className="form-row">
-        <div className="form-group">
-          <label htmlFor="paymentMethod">Payment Method *</label>
-          <select
-            id="paymentMethod"
-            name="paymentMethod"
-            value={formData.paymentMethod}
-            onChange={onChange}
-            className={errors.paymentMethod ? 'error' : ''}
-          >
-            <option value="">Select payment method</option>
-            {paymentMethods.map((method) => (
-              <option key={method.value} value={method.value}>
-                {method.label}
-              </option>
-            ))}
-          </select>
-          {errors.paymentMethod && <span className="error-message">{errors.paymentMethod}</span>}
-        </div>
-        
-        <div className="form-group">
-          <label htmlFor="paymentAmount">Payment Amount (€) *</label>
-          <input
-            type="number"
-            id="paymentAmount"
-            name="paymentAmount"
-            value={formData.paymentAmount}
-            onChange={onChange}
-            className={errors.paymentAmount ? 'error' : ''}
-            placeholder="Enter payment amount"
-            min="0"
-            step="0.01"
-          />
-          {errors.paymentAmount && <span className="error-message">{errors.paymentAmount}</span>}
-        </div>
+      <div className="form-group">
+        <label htmlFor="paymentMethod">Payment Method *</label>
+        <select
+          id="paymentMethod"
+          name="paymentMethod"
+          value={formData.paymentMethod}
+          onChange={onChange}
+          className={errors.paymentMethod ? 'error' : ''}
+        >
+          <option value="">Select payment method</option>
+          {paymentMethods.map((method) => (
+            <option key={method.value} value={method.value}>
+              {method.label}
+            </option>
+          ))}
+        </select>
+        {errors.paymentMethod && <span className="error-message">{errors.paymentMethod}</span>}
       </div>
 
-      <div className="checkbox-group">
-        <input
-          type="checkbox"
-          id="withAccommodation"
-          name="withAccommodation"
-          checked={formData.withAccommodation}
-          onChange={onChange}
-        />
-        <label htmlFor="withAccommodation">
-          <FaBed /> I need accommodation assistance
-        </label>
-      </div>
+      {/* Display calculated total for reference */}
+      {formData.calculatedTotal > 0 && (
+        <div className="payment-summary">
+          <h4>Payment Summary</h4>
+          <div className="total-amount">
+            <span>Total Amount to Pay:</span>
+            <span className="amount-value">
+              {formData.calculatedTotal} {formData.currency}
+            </span>
+          </div>
+          <p className="payment-note">
+            Please ensure your payment matches this exact amount. The payment amount is automatically calculated based on your registration selections.
+          </p>
+        </div>
+      )}
 
       {formData.paymentMethod && (
         <div className="form-group">

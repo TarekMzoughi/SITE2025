@@ -53,6 +53,15 @@
   text-align: center;
 }
 
+/* Registration page specific styling */
+.page-container .page-content {
+  background: var(--color-white);
+  padding: 2rem;
+  border-radius: var(--radius-xl);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
 .page-content p {
   font-size: 1.1rem;
   line-height: 1.8;
@@ -1455,6 +1464,400 @@
   text-decoration: underline;
 }
 
+/* Registration Tables */
+.registration-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.registration-table th {
+  background: linear-gradient(135deg, var(--color-brand-blue), var(--color-brand-cyan));
+  color: var(--color-white);
+  padding: 0.75rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.registration-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-gray-200);
+  color: var(--color-gray-700);
+}
+
+.registration-table tbody tr:hover {
+  background: var(--color-gray-50);
+}
+
+.registration-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.price-highlight {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--color-brand-blue), var(--color-brand-cyan));
+  color: var(--color-white);
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius-lg);
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 1rem 0;
+  box-shadow: var(--shadow-md);
+}
+
+/* Clean Registration Sections */
+.registration-section {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-gray-200);
+}
+
+.registration-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.registration-section h3 {
+  color: var(--color-gray-900);
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+/* Only add border to registration page section titles, not form section titles */
+.page-container:not(.registration-form-page) .registration-section h3 {
+  border-bottom: 2px solid var(--color-brand-blue);
+  display: inline-block;
+}
+
+/* Remove any blue lines from form section titles */
+.form-section h3,
+.form-section .section-title,
+.registration-form-page h3,
+.registration-form-page .section-title,
+.registration-form-page .page-content h3,
+.form-section h3.section-title,
+h3.section-title {
+  border-bottom: none !important;
+  border: none !important;
+  border-top: none !important;
+  padding-bottom: 0 !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+  background: none !important;
+}
+
+/* Override any pseudo-elements that might create lines */
+.form-section h3::before,
+.form-section h3::after,
+.form-section .section-title::before,
+.form-section .section-title::after,
+.registration-form-page .page-content h3::before,
+.registration-form-page .page-content h3::after,
+h3.section-title::before,
+h3.section-title::after {
+  display: none !important;
+  content: none !important;
+  border: none !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+
+/* Nuclear option - remove all possible styling from form h3 elements */
+.registration-form-page h3,
+.registration-form-page .form-section h3,
+.registration-form-page .form-section .section-title,
+div.form-section h3.section-title {
+  all: unset !important;
+  font-family: var(--font-heading) !important;
+  font-size: 1.5rem !important;
+  font-weight: 700 !important;
+  color: var(--color-gray-900) !important;
+  margin-bottom: 2rem !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 0.75rem !important;
+}
+
+.registration-section h4 {
+  color: var(--color-gray-800);
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 1.25rem 0 0.75rem 0;
+}
+
+.registration-section p {
+  color: var(--color-gray-700);
+  line-height: 1.6;
+  margin-bottom: 0.75rem;
+}
+
+.registration-section ul {
+  margin: 0.75rem 0;
+  padding-left: 1.5rem;
+}
+
+.registration-section li {
+  color: var(--color-gray-700);
+  line-height: 1.5;
+  margin-bottom: 0.4rem;
+}
+
+.registration-section a {
+  color: var(--color-brand-blue);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.registration-section a:hover {
+  text-decoration: underline;
+}
+
+.register-btn {
+  background: linear-gradient(135deg, var(--color-brand-blue), var(--color-brand-cyan));
+  color: var(--color-white);
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-md);
+}
+
+.register-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Registration Form Fee Calculation */
+.fee-calculation-section {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(30, 64, 175, 0.05), rgba(8, 145, 178, 0.05));
+  border: 1px solid var(--color-brand-blue);
+  border-radius: var(--radius-lg);
+}
+
+.fee-calculation-section h4 {
+  color: var(--color-brand-blue);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.fee-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.fee-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(30, 64, 175, 0.1);
+}
+
+.fee-item:last-child {
+  border-bottom: none;
+}
+
+.fee-breakdown-section .fee-item {
+  border-bottom: none;
+  padding-bottom: 0.25rem;
+}
+
+.fee-sub-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.25rem 0 0.25rem 1rem;
+  font-size: 0.875rem;
+  color: var(--color-gray-600);
+}
+
+.fee-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0 0.5rem 0;
+  border-top: 2px solid var(--color-brand-blue);
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.info-text {
+  font-size: 0.875rem;
+  color: var(--color-gray-600);
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+
+.accompanying-persons-section {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: var(--color-gray-50);
+  border-radius: var(--radius-lg);
+}
+
+.pricing-info {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--color-brand-blue);
+}
+
+.pricing-rules {
+  margin: 0.5rem 0 0 0;
+  padding-left: 1rem;
+  list-style: none;
+}
+
+.pricing-rules li {
+  margin-bottom: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--color-gray-700);
+  position: relative;
+}
+
+.pricing-rules li::before {
+  content: '•';
+  color: var(--color-brand-blue);
+  font-weight: bold;
+  position: absolute;
+  left: -1rem;
+}
+
+.add-person-row {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  align-items: flex-end;
+}
+
+.add-person-input {
+  flex: 2;
+  padding: 0.75rem;
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+}
+
+.add-person-age-input {
+  flex: 1;
+  padding: 0.75rem;
+  border: 1px solid var(--color-gray-300);
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+}
+
+.add-person-btn {
+  padding: 0.75rem 1rem;
+  background: var(--color-brand-blue);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.add-person-btn:hover {
+  background: var(--color-brand-cyan);
+}
+
+.accompanying-persons-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.accompanying-person-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: var(--color-white);
+  border: 1px solid var(--color-gray-200);
+  border-radius: var(--radius-md);
+}
+
+.remove-person-btn {
+  background: var(--color-red-500);
+  color: var(--color-white);
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all 0.3s ease;
+}
+
+.remove-person-btn:hover {
+  background: var(--color-red-600);
+}
+
+/* Payment Summary Section */
+.payment-summary {
+  margin: 1.5rem 0;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, rgba(5, 150, 105, 0.05), rgba(16, 185, 129, 0.05));
+  border: 1px solid var(--color-success);
+  border-radius: var(--radius-lg);
+}
+
+.payment-summary h4 {
+  color: var(--color-success);
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.total-amount {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  margin-bottom: 1rem;
+  border-left: 4px solid var(--color-success);
+}
+
+.amount-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-success);
+}
+
+.payment-note {
+  font-size: 0.875rem;
+  color: var(--color-gray-600);
+  font-style: italic;
+  margin: 0;
+  line-height: 1.5;
+}
+
 /* Honorary Committee Specific */
 .honorary-intro {
   margin-bottom: 40px;
@@ -1950,6 +2353,10 @@
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 2rem;
+  border: none !important;
+  border-bottom: none !important;
+  border-top: none !important;
+  padding-bottom: 0 !important;
 }
 
 .form-section .section-title svg {

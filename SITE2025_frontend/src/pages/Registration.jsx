@@ -1,342 +1,222 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { FaCheck, FaClock, FaUsers, FaGraduationCap, FaBuilding, FaCalendarAlt, FaEnvelope, FaCreditCard } from 'react-icons/fa'
+import { FaUsers, FaGraduationCap, FaUserTie } from 'react-icons/fa'
 import './Pages.css'
 
 const Registration = () => {
-  const [selectedType, setSelectedType] = useState(null)
   const navigate = useNavigate()
-
-  // Check if registration is open (January 15, 2025) and closed (March 10, 2025)
-  const registrationOpenDate = new Date('2025-01-15')
-  const registrationCloseDate = new Date('2026-03-10')
-
-  const isRegistrationOpen = () => {
-    const currentDate = new Date()
-    return currentDate >= registrationOpenDate && currentDate <= registrationCloseDate
-  }
-
-  const isRegistrationClosed = () => {
-    const currentDate = new Date()
-    return currentDate > registrationCloseDate
-  }
-
-  // Format the registration open date for display
-  const formatRegistrationDate = () => {
-    return registrationOpenDate.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    })
-  }
-
-  // Format the early bird deadline date
-  const formatEarlyBirdDeadline = () => {
-    const earlyBirdDeadline = new Date(registrationOpenDate)
-    earlyBirdDeadline.setDate(registrationOpenDate.getDate() + 44) // 44 days after registration opens
-    return earlyBirdDeadline.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    })
-  }
-
-  // Format the registration close date
-  const formatRegistrationCloseDate = () => {
-    return registrationCloseDate.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    })
-  }
 
   const handleRegisterNow = () => {
     navigate('/registration-form')
   }
-const registrationTypes = [
-  {
-    id: "person-no-hotel",
-    type: "Person Registration (No Hotel)",
-    icon: <FaUsers />,
-    earlyBird: "450 DT",
-    regular: "600 DT",
-    description: "For persons attending the conference without hotel accommodation",
-    includes: [
-      "Conference attendance (2 days)",
-      "Conference materials & bag",
-      "Coffee breaks & refreshments",
-      "Lunch (2 days)",
-      "Access to poster sessions",
-      "Certificate of participation",
-      "WiFi access"
-    ]
-  },
-  {
-    id: "person-single-room",
-    type: "Person Registration + Single Hotel Room",
-    icon: <FaBuilding />,
-    earlyBird: "900 DT",
-    regular: "1100 DT",
-    description: "Conference attendance with single room hotel accommodation in Hammamet (2 nights)",
-    includes: [
-      "All benefits of Person Registration (No Hotel)",
-      "Single room hotel accommodation (2 nights)",
-      "Breakfast included",
-      "Local transportation to venue"
-    ]
-  },
-  {
-    id: "person-double-room",
-    type: "Person Registration + Double Hotel Room (Shared)",
-    icon: <FaUsers />,
-    earlyBird: "650 DT",
-    regular: "800 DT",
-    description: "Conference attendance with shared double room hotel accommodation (2 nights)",
-    includes: [
-      "All benefits of Person Registration (No Hotel)",
-      "Shared double room hotel accommodation (2 nights)",
-      "Breakfast included",
-      "Local transportation to venue"
-    ]
+// Registration fee data
+  const registrationWithAccommodation = [
+    {
+      category: "Academic",
+      tunisia: "700 TND",
+      international: "450 €",
+      icon: <FaGraduationCap />
+    },
+    {
+      category: "Student",
+      tunisia: "650 TND",
+      international: "400 €",
+      icon: <FaUsers />
+    },
+    {
+      category: "Professional",
+      tunisia: "750 TND",
+      international: "500 €",
+      icon: <FaUserTie />
+    }
+  ]
+
+  const additionalFees = [
+    {
+      type: "Adult accompanying person",
+      tunisia: "120 TND / night",
+      international: "80 € / night"
+    },
+    {
+      type: "Single supplement",
+      tunisia: "25 TND / night",
+      international: "25 € / night"
+    },
+    {
+      type: "Children < 2 years",
+      tunisia: "Free",
+      international: "Free"
+    },
+    {
+      type: "Child < 12 years with 2 adults",
+      tunisia: "50% discount",
+      international: "50% discount"
+    },
+    {
+      type: "Child < 12 years in separate room or with single adult",
+      tunisia: "30% discount",
+      international: "30% discount"
+    }
+  ]
+
+  const bankDetails = {
+    bank: "Union Internationale des Banques",
+    address: "Menzel Jemil",
+    purpose: "Registration to SITE 2025",
+    accountName: "Association de développement technologique de Bizerte",
+    accountNumber: "12202000009030939395",
+    iban: "TN591220200009030939395",
+    swift: "UIBKTNTT",
+    tin: "1343117/A",
+    email: "contact@site-conf.com"
   }
-]
-
-
-  // Generate important dates based on registration open and close dates
-  const generateImportantDates = () => {
-    const regDate = new Date(registrationOpenDate)
-    const earlyBirdDeadline = new Date(regDate)
-    earlyBirdDeadline.setDate(regDate.getDate() + 44) // 44 days after registration opens
-
-    const conferenceStart = new Date(registrationCloseDate)
-    conferenceStart.setDate(registrationCloseDate.getDate() + 5) // 5 days after registration closes
-
-    const conferenceEnd = new Date(conferenceStart)
-    conferenceEnd.setDate(conferenceStart.getDate() + 1) // Next day
-
-    return [
-      {
-        date: formatRegistrationDate(),
-        event: "Early Bird Registration Opens",
-        status: "upcoming"
-      },
-      {
-        date: earlyBirdDeadline.toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-        }),
-        event: "Early Bird Registration Deadline",
-        status: "upcoming"
-      },
-      {
-        date: formatRegistrationCloseDate(),
-        event: "Registration Deadline",
-        status: "upcoming"
-      },
-      {
-        date: `${conferenceStart.toLocaleDateString('en-US', {
-          month: 'long',
-          day: 'numeric'
-        })}-${conferenceEnd.getDate()}, ${conferenceStart.getFullYear()}`,
-        event: "Conference Dates",
-        status: "upcoming"
-      }
-    ]
-  }
-
-  const importantDates = generateImportantDates()
 
   return (
-    <div className="page-container registration-page">
+    <div className="page-container">
       <div className="container">
         <div className="page-header">
-          <h1>Conference Registration</h1>
-          <p className="page-subtitle">Join us at SITE 2025 - Smart Industry, Technology and Environment</p>
+          <h1>Registration</h1>
+          <p className="page-subtitle">SITE 2025 - Smart Industry, Technology and Environment</p>
         </div>
 
         <div className="page-content">
-          {/* Registration Status */}
-          <div className="registration-status">
-            <div className="status-card">
-              <h3>Registration Status</h3>
-              {isRegistrationClosed() ? (
-                <div className="registration-closed">
-                  <p className="status-message error">
-                    <FaClock /> Registration closed on {formatRegistrationCloseDate()}
-                  </p>
-                  <p>Registration is no longer available for this conference.</p>
-                </div>
-              ) : isRegistrationOpen() ? (
-                <div className="registration-open">
-                  <p className="status-message success">
-                    <FaCheck /> Registration is now open!
-                  </p>
-                  <p>Early bird discounts available until {formatEarlyBirdDeadline()}</p>
-                  <p>Registration closes on {formatRegistrationCloseDate()}</p>
-                  <button
-                    className="register-now-btn"
-                    onClick={handleRegisterNow}
-                  >
-                    Register Now
-                  </button>
-                </div>
-              ) : (
-                <div className="registration-not-open">
-                  <p className="status-message">
-                    <FaClock /> Registration opens {formatRegistrationDate()}
-                  </p>
-                  <p>Early bird discounts available until {formatEarlyBirdDeadline()}</p>
-                  <p>Registration closes on {formatRegistrationCloseDate()}</p>
-                </div>
-              )}
+          {/* Registration Overview */}
+          <section className="registration-section">
+            <h3>Registration Requirements</h3>
+            <p>
+              For the inclusion of an accepted paper in the conference, <strong>at least one author</strong> of the paper must register for the congress and pay the fee before the deadline.
+            </p>
+
+            <h4>The registration fee covers:</h4>
+            <ul>
+              <li>All conference materials</li>
+              <li>Hotel full boarding in a double room (shared with another participant) for two nights</li>
+            </ul>
+
+            <p>You may register to attend the conference either:</p>
+            <ul>
+              <li>To <strong>present papers</strong></li>
+              <li>Or as <strong>audience</strong></li>
+            </ul>
+            <p>The registration may be <strong>with or without accommodation</strong>.</p>
+          </section>
+
+          {/* Check-in/Check-out Information */}
+          <section className="registration-section">
+            <h3>Accommodation Schedule</h3>
+            <p><strong>Arrival (check-in):</strong> October 24th after 12:00</p>
+            <p><strong>Departure (check-out):</strong> October 26th before 12:00</p>
+          </section>
+
+          {/* Registration Fees - With Accommodation */}
+          <section className="registration-section">
+            <h3>With Accommodation</h3>
+            <table className="registration-table">
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>From Tunisia</th>
+                  <th>From other countries</th>
+                </tr>
+              </thead>
+              <tbody>
+                {registrationWithAccommodation.map((fee, index) => (
+                  <tr key={index}>
+                    <td>{fee.category}</td>
+                    <td>{fee.tunisia}</td>
+                    <td>{fee.international}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </section>
+
+          {/* Registration Fees - Without Accommodation */}
+          <section className="registration-section">
+            <h3>Without Accommodation</h3>
+            <p>The registration fee covers all conference materials, lunches, and coffee breaks:</p>
+            <div className="price-highlight">
+              <strong>450 TND</strong>
             </div>
-          </div>
+            <p>For more details on accommodation and conference hotel, see <a href="/venue">Venue page</a>.</p>
+          </section>
 
-          {/* Important Dates */}
-          <div className="important-dates-section">
-            <h2 className="section-title">Important Dates</h2>
-            <div className="dates-timeline">
-              {importantDates.map((item, index) => (
-                <div key={index} className="date-item">
-                  <div className="date-marker"></div>
-                  <div className="date-content">
-                    <div className="date-date">
-                      <FaCalendarAlt /> {item.date}
-                    </div>
-                    <div className="date-event">{item.event}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          {/* Payment Methods */}
+          <section className="registration-section">
+            <h3>Payment Methods</h3>
 
-          {/* Registration Types */}
-          <div className="registration-types">
-            <h2 className="section-title">Registration Types & Fees</h2>
-            <div className="types-grid">
-              {registrationTypes.map((type) => (
-                <div
-                  key={type.id}
-                  className={`registration-card ${type.popular ? 'popular' : ''} ${selectedType === type.id ? 'selected' : ''}`}
-                  onClick={() => setSelectedType(selectedType === type.id ? null : type.id)}
-                >
-                  {type.popular && <div className="popular-badge">Most Popular</div>}
+            <h4>Bank Transfer</h4>
+            <ul>
+              <li>Pay the full amount <strong>without any deduction</strong> and <strong>all bank charges paid by the beneficiary</strong></li>
+              <li><strong>Payment can't be refunded</strong></li>
+              <li>Send a <strong>scanned copy</strong> of the payment Banking Transfer Order to: <a href="mailto:contact@site-conf.com">contact@site-conf.com</a></li>
+            </ul>
 
-                  <div className="card-header">
-                    <div className="card-icon">{type.icon}</div>
-                    <h3>{type.type}</h3>
-                    <p className="card-description">{type.description}</p>
-                  </div>
+            <h4>Bon de commande</h4>
+            <p>(Only for Tunisian Universities)</p>
+          </section>
 
-                  <div className="pricing">
-                    <div className="price-row">
-                      <span className="price-label">Early Bird</span>
-                      <span className="price-value early-bird">{type.earlyBird}</span>
-                    </div>
-                    <div className="price-row">
-                      <span className="price-label">Regular</span>
-                      <span className="price-value regular">{type.regular}</span>
-                    </div>
-                  </div>
+          {/* Bank Account Details */}
+          <section className="registration-section">
+            <h3>Bank Account Details</h3>
 
-                  <div className="includes-section">
-                    <h4>What's Included:</h4>
-                    <ul className="includes-list">
-                      {type.includes.map((item, itemIndex) => (
-                        <li key={itemIndex}>
-                          <FaCheck className="check-icon" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
+            <h4>Bank Information</h4>
+            <p><strong>Bank:</strong> {bankDetails.bank} <a href="#">[Download bank identity]</a></p>
+            <p><strong>Address:</strong> {bankDetails.address}</p>
+            <p><strong>Purpose:</strong> {bankDetails.purpose}</p>
+            <p><strong>Account name:</strong> {bankDetails.accountName}</p>
 
-                  <button className="select-button" disabled>
-                    Registration Opens Soon
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
+            <h4>Payment To:</h4>
+            <p><strong>Account number:</strong> {bankDetails.accountNumber}</p>
+            <p><strong>IBAN:</strong> {bankDetails.iban}</p>
+            <p><strong>Swift:</strong> {bankDetails.swift}</p>
+            <p><strong>Tax Identification Number (TIN):</strong> {bankDetails.tin} <a href="#">[Download Tax ID]</a></p>
+            <p><strong>Registre National des Entreprises (RNE):</strong> <a href="#">[Download RNE]</a></p>
+          </section>
 
-          {/* Registration Process */}
-          <div className="registration-process">
-            <h2 className="section-title">How to Register</h2>
-            <div className="process-steps">
-              <div className="step">
-                <div className="step-number">1</div>
-                <div className="step-content">
-                  <h4>Choose Registration Type</h4>
-                  <p>Select the registration category that best fits your profile</p>
-                </div>
-              </div>
-              <div className="step">
-                <div className="step-number">2</div>
-                <div className="step-content">
-                  <h4>Complete Registration Form</h4>
-                  <p>Fill out the online form with your personal and professional details</p>
-                </div>
-              </div>
-              <div className="step">
-                <div className="step-number">3</div>
-                <div className="step-content">
-                  <h4>Make Payment</h4>
-                  <p>Secure online payment via credit card or bank transfer</p>
-                </div>
-              </div>
-              <div className="step">
-                <div className="step-number">4</div>
-                <div className="step-content">
-                  <h4>Receive Confirmation</h4>
-                  <p>Get your registration confirmation and conference details via email</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          {/* Additional Fees */}
+          <section className="registration-section">
+            <h3>Additional Fees</h3>
+            <table className="registration-table">
+              <thead>
+                <tr>
+                  <th>Fee Type</th>
+                  <th>From Tunisia</th>
+                  <th>From other countries</th>
+                </tr>
+              </thead>
+              <tbody>
+                {additionalFees.map((fee, index) => (
+                  <tr key={index}>
+                    <td>{fee.type}</td>
+                    <td>{fee.tunisia}</td>
+                    <td>{fee.international}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
 
-          {/* Payment Information */}
-          <div className="payment-info">
-            <h2 className="section-title">Payment Information</h2>
-            <div className="payment-grid">
-              <div className="payment-card">
-                <FaCreditCard className="payment-icon" />
-                <h4>Accepted Payment Methods</h4>
-                <ul>
-                  <li>Credit Cards (Visa, MasterCard, American Express)</li>
-                  <li>Bank Transfer</li>
-                  <li>PayPal</li>
-                  <li>On-site payment (subject to availability)</li>
-                </ul>
-              </div>
-              <div className="payment-card">
-                <FaEnvelope className="payment-icon" />
-                <h4>Invoice & Receipt</h4>
-                <ul>
-                  <li>Official invoice sent via email</li>
-                  <li>Receipt provided upon payment confirmation</li>
-                  <li>VAT included in all prices</li>
-                  <li>Refund policy available on request</li>
-                </ul>
-              </div>
-            </div>
-          </div>
+            <h4>Additional Services</h4>
+            <p><strong>Airport transfer</strong> (Tunis Carthage Airport ↔ hotel): <strong>50 €</strong></p>
+            <p><strong>Additional charges for Social Event:</strong> <strong>100 € / 50 TND</strong></p>
+          </section>
+
+          {/* Register Now Button */}
+          <section className="registration-section" style={{ textAlign: 'center' }}>
+            <button
+              className="register-btn"
+              onClick={handleRegisterNow}
+            >
+              Register Now
+            </button>
+          </section>
 
           {/* Contact Information */}
-          <div className="registration-contact">
-            <h2 className="section-title">Need Help?</h2>
-            <div className="contact-card">
-              <h4>Registration Support</h4>
-              <p>
-                For questions about registration, payment, or special requirements,
-                please don't hesitate to contact our registration team.
-              </p>
-              <div className="contact-details">
-                <p><FaEnvelope /> <a href="mailto:registration@site-conf.com">registration@site-conf.com</a></p>
-                <p><FaEnvelope /> <a href="mailto:contact@site-conf.com">contact@site-conf.com</a></p>
-              </div>
-            </div>
-          </div>
+          <section className="registration-section">
+            <h3>Contact</h3>
+            <p><a href="mailto:contact@site-conf.com">contact@site-conf.com</a></p>
+            <p>For more information, please contact the organizers.</p>
+          </section>
         </div>
       </div>
     </div>

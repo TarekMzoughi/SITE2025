@@ -8,15 +8,26 @@ const useRegistrationForm = () => {
     position: '',
     email: '',
     phone: '',
-    
-    // Article and Accompanying
+
+    // Registration Details
+    participantCategory: '',
+    fromTunisia: undefined,
+    withAccommodation: false,
+    singleRoom: false,
     withArticle: false,
+    airportTransfer: false,
+    socialEvent: false,
+
+    // Accompanying Persons
     withAccompanying: false,
     accompanyingPersons: [],
-    
+
+    // Fee Calculation
+    calculatedTotal: 0,
+    currency: 'TND',
+
     // Payment Information
     paymentMethod: '',
-    withAccommodation: false,
     paymentAmount: 0,
     paymentProofPath: null
   })
@@ -50,31 +61,33 @@ const useRegistrationForm = () => {
 
   const validateForm = () => {
     const newErrors = {}
-    
+
     // Required fields validation
     if (!formData.fullName.trim()) newErrors.fullName = 'Full name is required'
     if (!formData.institution.trim()) newErrors.institution = 'Institution is required'
     if (!formData.position.trim()) newErrors.position = 'Position is required'
     if (!formData.email.trim()) newErrors.email = 'Email is required'
     if (!formData.phone.trim()) newErrors.phone = 'Phone number is required'
+    if (!formData.participantCategory) newErrors.participantCategory = 'Please select your participant category'
+    if (formData.fromTunisia === undefined) newErrors.fromTunisia = 'Please select your location'
     if (!formData.paymentMethod) newErrors.paymentMethod = 'Please select a payment method'
-    if (formData.paymentAmount <= 0) newErrors.paymentAmount = 'Payment amount must be greater than 0'
-    
+    if (formData.calculatedTotal <= 0) newErrors.calculatedTotal = 'Registration fee calculation error'
+
     // Email validation
     if (formData.email && !/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email address'
     }
-    
+
     // Accompanying persons validation
     if (formData.withAccompanying && formData.accompanyingPersons.length === 0) {
       newErrors.accompanyingPersons = 'Please add at least one accompanying person or uncheck the option'
     }
-    
+
     // Payment proof validation
     if (formData.paymentMethod && !formData.paymentProofPath) {
       newErrors.paymentProofPath = 'Please upload payment proof'
     }
-    
+
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -86,11 +99,18 @@ const useRegistrationForm = () => {
       position: '',
       email: '',
       phone: '',
+      participantCategory: '',
+      fromTunisia: undefined,
+      withAccommodation: false,
+      singleRoom: false,
       withArticle: false,
+      airportTransfer: false,
+      socialEvent: false,
       withAccompanying: false,
       accompanyingPersons: [],
+      calculatedTotal: 0,
+      currency: 'TND',
       paymentMethod: '',
-      withAccommodation: false,
       paymentAmount: 0,
       paymentProofPath: null
     })
@@ -117,12 +137,19 @@ const useRegistrationForm = () => {
         position: formData.position,
         email: formData.email,
         phone: formData.phone,
+        participantCategory: formData.participantCategory,
+        fromTunisia: formData.fromTunisia,
+        withAccommodation: formData.withAccommodation,
+        singleRoom: formData.singleRoom,
         withArticle: formData.withArticle,
+        airportTransfer: formData.airportTransfer,
+        socialEvent: formData.socialEvent,
         withAccompanying: formData.withAccompanying,
         accompanyingPersons: formData.accompanyingPersons,
+        calculatedTotal: formData.calculatedTotal,
+        currency: formData.currency,
         paymentMethod: formData.paymentMethod,
-        withAccommodation: formData.withAccommodation,
-        paymentAmount: formData.paymentAmount
+        paymentAmount: formData.calculatedTotal // Use calculated total as payment amount
       }
       
       // Add registration data as JSON string
