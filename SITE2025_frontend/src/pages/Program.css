@@ -1,25 +1,66 @@
-/* Program Page Styling */
+/* Ultra-Premium Program Page Design */
+:root {
+  --color-primary: #1e40af;
+  --color-primary-dark: #1e3a8a;
+  --color-accent: #06b6d4;
+  --color-white: #ffffff;
+  --font-heading: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
 .program-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f8f9fa, #e3f2fd, #fff3e0);
-  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-  color: #2c3e50;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(30, 64, 175, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
+    linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+  font-family: var(--font-heading);
+  color: #1e293b;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.program-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231e40af' fill-opacity='0.02'%3E%3Ccircle cx='50' cy='50' r='2'/%3E%3Crect x='45' y='45' width='10' height='10' rx='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+  animation: backgroundFloat 25s ease-in-out infinite;
+}
+
+@keyframes backgroundFloat {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
 }
 
 .page-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 1;
 }
 
-/* Hero Section */
+/* Premium Hero Section */
 .program-hero {
-  padding: 80px 0;
+  padding: 120px 0;
   text-align: center;
-  background: linear-gradient(to right, #1e3c72, #2a5298);
+  background:
+    linear-gradient(135deg, rgba(30, 64, 175, 0.1) 0%, transparent 50%),
+    linear-gradient(45deg, #1e40af 0%, #06b6d4 100%);
   color: white;
   position: relative;
   overflow: hidden;
+  box-shadow:
+    0 20px 60px rgba(30, 64, 175, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  border-radius: 0 0 80px 80px;
+  margin-bottom: 2rem;
 }
 
 .hero-title {

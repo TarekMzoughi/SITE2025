@@ -75,16 +75,28 @@ const Site2023 = () => {
           <div className="gallery-grid">
             {galleryImages.map((image, index) => (
               <div key={index} className="gallery-item">
-                <img 
-                  src={image} 
-                  alt={`SITE 2023 event photo ${index + 1}`} 
+                <img
+                  src={image}
+                  alt={`SITE 2023 event photo ${index + 1}`}
                   className="gallery-image"
+                  loading="lazy"
                 />
               </div>
             ))}
           </div>
-          <br />
-          <img src="/gallery30-2023.jpg" alt="" />
+
+          {/* Featured highlight image */}
+          <div className="gallery-highlight">
+            <div className="highlight-image-container">
+              <img
+                src="/gallery30-2023.jpg"
+                alt="SITE 2023 Conference Highlight"
+                className="highlight-image"
+                loading="lazy"
+              />
+              
+            </div>
+          </div>
         </section>
         
       </section>

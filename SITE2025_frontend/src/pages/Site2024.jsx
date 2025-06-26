@@ -82,8 +82,20 @@ const Site2024 = () => {
             ))}
           
           </div>
-          <br />
-            <img src="/gallery28-2024.jpg" alt="" />
+          {/* Featured highlight image */}
+          <div className="gallery-highlight">
+            <div className="highlight-image-container">
+              <img
+                src="/gallery28-2024.jpg"
+                alt="SITE 2023 Conference Highlight"
+                className="highlight-image"
+                loading="lazy"
+              />
+              
+            </div>
+          </div>
+          
+            
         </section>
       </section>
     </main>

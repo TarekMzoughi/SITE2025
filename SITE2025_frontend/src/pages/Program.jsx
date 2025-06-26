@@ -1,36 +1,68 @@
-import React, { useState, useEffect } from 'react';
-import { FaCalendarAlt, FaClock, FaMapMarkerAlt, FaMicrophone, FaUsers, FaStar, FaRocket, FaLightbulb, FaGraduationCap } from 'react-icons/fa';
-import './Program_bright.css';
+import React, { useState } from 'react';
+import { FaCalendarAlt, FaClock, FaMapMarkerAlt, FaMicrophone, FaUsers, FaStar } from 'react-icons/fa';
+import './Program_Premium.css';
 
 const Program = () => {
   const speakersData = [
-    { name: 'Speaker 2', title: 'CEO', topic: 'Smart factory' },
-    { name: 'Speaker 1', title: 'Professor', topic: 'Mechanical Engineering' },
-    { name: 'Speaker 3', title: 'Professor', topic: 'Big Data & Security' },
-    { name: 'Speaker', title: 'Digital Marketing', topic: 'Marketing' },
+    {
+      name: 'Dr. Sarah Johnson',
+      title: 'Chief Technology Officer',
+      topic: 'Smart Manufacturing & Industry 4.0',
+      company: 'TechCorp Industries'
+    },
+    {
+      name: 'Prof. Ahmed Hassan',
+      title: 'Professor of Mechanical Engineering',
+      topic: 'Sustainable Engineering Solutions',
+      company: 'University of Technology'
+    },
+    {
+      name: 'Dr. Maria Rodriguez',
+      title: 'Data Science Director',
+      topic: 'AI & Machine Learning in Industry',
+      company: 'DataTech Solutions'
+    },
+    {
+      name: 'Dr. James Chen',
+      title: 'Environmental Technology Expert',
+      topic: 'Green Technology & Sustainability',
+      company: 'EcoTech Research'
+    },
   ];
 
   const scheduleData = {
     'October 24': [
-      { time: '14h-15h', event: 'Opening Ceremony' },
-      { time: '15h-15h30', event: 'Coffee Break' },
-      { time: '15h30-17h', event: 'Plenary Session 1' },
+      { time: '08:30-09:00', event: 'Registration & Welcome Coffee' },
+      { time: '09:00-09:30', event: 'Opening Ceremony' },
+      { time: '09:30-10:30', event: 'Keynote: Future of Smart Industry' },
+      { time: '10:30-11:00', event: 'Coffee Break' },
+      { time: '11:00-12:30', event: 'Technical Session 1: IoT & Smart Systems' },
+      { time: '12:30-14:00', event: 'Lunch Break' },
+      { time: '14:00-15:30', event: 'Technical Session 2: AI & Machine Learning' },
+      { time: '15:30-16:00', event: 'Coffee Break' },
+      { time: '16:00-17:30', event: 'Panel Discussion: Industry 4.0 Trends' },
     ],
     'October 25': [
-      { time: '9h-10h', event: 'Oral Session 2' },
-      { time: '10h-10h30', event: 'Plenary Session 3' },
-      { time: '10h30-12h30', event: 'Oral Session 1' },
-      { time: '12h30-14:00', event: 'Coffee Break' },
-      { time: '14h - 15h', event: 'Plenary Session 2' },
-      { time: '15h-15h30', event: 'Lunch Break' },
+      { time: '09:00-10:00', event: 'Keynote: Sustainable Technology Solutions' },
+      { time: '10:00-10:30', event: 'Coffee Break' },
+      { time: '10:30-12:00', event: 'Technical Session 3: Environmental Technology' },
+      { time: '12:00-13:30', event: 'Lunch Break' },
+      { time: '13:30-15:00', event: 'Technical Session 4: Smart Manufacturing' },
+      { time: '15:00-15:30', event: 'Coffee Break' },
+      { time: '15:30-17:00', event: 'Workshop: Hands-on Smart Systems' },
+      { time: '17:00-18:00', event: 'Poster Session & Networking' },
     ],
     'October 26': [
-      { time: '9h-10h', event: 'Special Talk: Event Expert at Multi Conference – Yellow Hall' },
-      { time: '10h30-12h', event: 'Panel Discussion: Future of Smart Tech' },
-      { time: '12h30-14:00', event: 'Coffee Break' },
+      { time: '09:00-10:00', event: 'Keynote: Digital Transformation in Industry' },
+      { time: '10:00-10:30', event: 'Coffee Break' },
+      { time: '10:30-12:00', event: 'Technical Session 5: Cybersecurity & Data Analytics' },
+      { time: '12:00-13:30', event: 'Lunch Break' },
+      { time: '13:30-15:00', event: 'Technical Session 6: Emerging Technologies' },
+      { time: '15:00-15:30', event: 'Coffee Break' },
+      { time: '15:30-16:30', event: 'Closing Ceremony & Awards' },
     ],
-    'Special Session': [
-      { time: 'Soon', event: 'To Be Announced' },
+    'Special Sessions': [
+      { time: 'soon', event: 'to be annonced ' },
     ],
   };
 
@@ -42,11 +74,11 @@ const Program = () => {
       <div className="page-container">
         <div className="program-hero">
           <h1 className="hero-title">SITE 2025 Conference Program</h1>
-          <p className="hero-subtitle">Join us for an extraordinary journey of innovation, learning, and networking with industry leaders and cutting-edge technology</p>
+          <p className="hero-subtitle">Discover our exciting lineup of speakers, sessions, and cutting-edge research presentations</p>
           <div className="hero-stats">
             <div className="stat-item">
-              <FaGraduationCap className="stat-icon" />
-              <span className="stat-number">4+</span>
+              <FaUsers className="stat-icon" />
+              <span className="stat-number">4</span>
               <span className="stat-label">Expert Speakers</span>
             </div>
             <div className="stat-item">
@@ -55,14 +87,9 @@ const Program = () => {
               <span className="stat-label">Conference Days</span>
             </div>
             <div className="stat-item">
-              <FaRocket className="stat-icon" />
+              <FaMicrophone className="stat-icon" />
               <span className="stat-number">10+</span>
-              <span className="stat-label">Innovation Sessions</span>
-            </div>
-            <div className="stat-item">
-              <FaLightbulb className="stat-icon" />
-              <span className="stat-number">∞</span>
-              <span className="stat-label">Ideas & Insights</span>
+              <span className="stat-label">Sessions</span>
             </div>
           </div>
         </div>
@@ -88,6 +115,7 @@ const Program = () => {
                 <div className="speaker-info">
                   <h3>{speaker.name}</h3>
                   <p className="speaker-title">{speaker.title}</p>
+                  <p className="speaker-company">{speaker.company}</p>
                   <div className="speaker-topic">
                     <FaMapMarkerAlt className="topic-icon" />
                     {speaker.topic}

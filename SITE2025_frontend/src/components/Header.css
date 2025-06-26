@@ -1,7 +1,4 @@
-/* ─────────────────────────────────────────────────────────
-   Header Styles (clean, compact, responsive)
-   ───────────────────────────────────────────────────────── */
-
+/* Sticky translucent header */
 .header {
   position: sticky;
   top: 0;
@@ -18,6 +15,7 @@
   border-bottom-color: rgba(0, 0, 0, 0.12);
 }
 
+/* (Optional) top-bar hidden – remove blue gradient */
 .top-bar {
   display: none;
 }
@@ -26,85 +24,66 @@
    Layout helpers
    ───────────────────────────────────────────────────────── */
 
-.main-nav {
-  background: transparent;
-  padding: 0.6rem 0;
-}
-
-@media (max-width: 575.98px) {
-  .main-nav {
-    padding: 0.5rem 0;
-  }
-}
-
+/* Switch grid → flex for easier responsiveness */
 .nav-content {
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  min-height: 60px;
+  gap: 1rem;
+  min-height: 72px;
 }
 
-/* Unified logo group (3 logos side-by-side) */
-.logo-group {
+/* Partner logos stack vertically on desktop, hide on phones - now on RIGHT side */
+.partner-logos-right {
   display: flex;
-  align-items: center;
+  flex-direction: ligne;
+  gap: 0.5rem;
+  align-items: flex-end;
+  order: 3;
+  
+}
+
+/* Hide partner logos on <576px */
+@media (max-width: 575.98px) {
+  .partner-logos-right {
+    display: none;
+  }
+}
+
+/* Logo centred on mobiles, normal on larger screens */
+.logo {
+  order: 2;               /* centre row on small */
+  flex: 1 1 100%;         /* full‑width row */
+  display: flex;
   justify-content: center;
-  gap: 1rem;
-  flex: 1 1 100%;
-  order: 2;
-  margin: 0.2rem 0;
+  margin: 0.25rem 0;
 }
 
 @media (min-width: 768px) {
-  .logo-group {
-    order: 0;
+  .logo {
+    order: 0;             /* restore original order */
     flex: 0 0 auto;
     margin: 0;
   }
 }
 
-.main-logo {
-  height: 70px;
+/* Logo image scaling */
+.logo-image {
+  height: 88px;
   width: auto;
   object-fit: contain;
   transition: transform 0.3s ease;
 }
 
 @media (max-width: 575.98px) {
-  .main-logo {
-    height: 56px;
+  .logo-image {
+    height: 64px;
   }
 }
 
-.main-logo-link:hover .main-logo {
-  transform: scale(1.05);
-}
-
-/* Partner logos */
-.partner-logo {
-  height: 32px;
-  width: auto;
-  opacity: 0.8;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  cursor: pointer;
-}
-
-.partner-logo-link:hover .partner-logo {
-  opacity: 1;
-  transform: scale(1.05);
-}
-
-@media (max-width: 480px) {
-  .logo-group {
-    flex-direction: column;
-    gap: 0.3rem;
-  }
-
-  .partner-logo {
-    height: 28px;
-  }
+.logo a:hover .logo-image {
+  transform: scale(1.05) rotate(1deg);
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -116,11 +95,12 @@
   flex: 1 1 auto;
   justify-content: center;
   align-items: center;
-  gap: 0.4rem;
+  gap: 0.5rem;
   list-style: none;
   margin: 0;
   padding: 0;
   flex-wrap: wrap;
+  order: 1;
 }
 
 @media (max-width: 767.98px) {
@@ -137,10 +117,10 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.5rem 0.9rem;
+  padding: 0.65rem 1.1rem;
   color: #374151;
   font-weight: 500;
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   text-decoration: none;
   border-radius: 0.7rem;
   transition: all 0.25s ease;
@@ -179,8 +159,8 @@
   visibility: hidden;
   transform: translateY(8px);
   transition: all 0.35s ease;
-  padding: 0.45rem;
-  margin-top: 0.4rem;
+  padding: 0.6rem;
+  margin-top: 0.6rem;
   list-style: none;
 }
 
@@ -192,10 +172,10 @@
 
 .dropdown a {
   display: block;
-  padding: 0.5rem 0.9rem;
+  padding: 0.55rem 0.9rem;
   color: #374151;
   font-weight: 500;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   text-decoration: none;
   border-radius: 0.5rem;
   transition: all 0.25s ease;
@@ -208,91 +188,29 @@
 }
 
 /* ─────────────────────────────────────────────────────────
-   Responsive mobile navbar
+   Partner logos tweaks
    ───────────────────────────────────────────────────────── */
-
-.mobile-menu-toggle {
-  display: none;
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  color: #374151;
+.partner-logo {
+  height: 38px;
+  width: auto;
+  opacity: 0.8;
+  transition: opacity 0.3s ease, transform 0.3s ease;
   cursor: pointer;
 }
 
-@media (max-width: 767.98px) {
-  .mobile-menu-toggle {
-    display: block;
-  }
-
-  .nav-menu {
-    display: none;
-    flex-direction: column;
-    width: 100%;
-    padding-top: 0.5rem;
-    background-color: white;
-    border-top: 1px solid #e5e7eb;
-  }
-
-  .nav-menu.open {
-    display: flex;
-  }
-
-  .nav-item {
-    width: 100%;
-  }
-
-  .nav-link {
-    justify-content: flex-start;
-    padding: 0.6rem 1rem;
-  }
-
-  .dropdown {
-    position: static;
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: none !important;
-    margin: 0;
-    background: transparent;
-    box-shadow: none;
-    border: none;
-    padding: 0;
-    display: none;
-  }
-
-  .dropdown.show {
-    display: block;
-  }
-
-  .dropdown a {
-    padding-left: 2rem;
-  }
+.partner-logo-link:hover .partner-logo {
+  opacity: 1;
+  transform: scale(1.05);
 }
 
-.nav-link-wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+/* Minor aesthetic tweaks */
+.main-nav {
+  background: transparent;
+  padding: 1rem 0;
 }
 
-.dropdown-toggle {
-  background: none;
-  border: none;
-  font-size: 0.9rem;
-  padding: 0.5rem;
-  color: #374151;
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
-.dropdown-toggle:hover {
-  color: #1e40af;
-  transform: rotate(180deg);
-}
-
-/* On desktop: hide toggle arrows */
-@media (min-width: 768px) {
-  .dropdown-toggle {
-    display: none;
+@media (max-width: 575.98px) {
+  .main-nav {
+    padding: 0.7rem 0;
   }
 }
