@@ -4,31 +4,27 @@ import './Program_Premium.css';
 
 const Program = () => {
   const speakersData = [
-    {
-      name: 'Dr. Sarah Johnson',
-      title: 'Chief Technology Officer',
-      topic: 'Smart Manufacturing & Industry 4.0',
-      company: 'TechCorp Industries'
-    },
-    {
-      name: 'Prof. Ahmed Hassan',
-      title: 'Professor of Mechanical Engineering',
-      topic: 'Sustainable Engineering Solutions',
-      company: 'University of Technology'
-    },
-    {
-      name: 'Dr. Maria Rodriguez',
-      title: 'Data Science Director',
-      topic: 'AI & Machine Learning in Industry',
-      company: 'DataTech Solutions'
-    },
-    {
-      name: 'Dr. James Chen',
-      title: 'Environmental Technology Expert',
-      topic: 'Green Technology & Sustainability',
-      company: 'EcoTech Research'
-    },
-  ];
+  {
+    name: 'Speaker',
+    title: 'CEO',
+    topic: 'Smart Factory'
+  },
+  {
+    name: 'Speaker',
+    title: 'Professor',
+    topic: 'Mechanical Engineering'
+  },
+  {
+    name: 'Speaker',
+    title: 'Professor',
+    topic: 'Big Data & Security'
+  },
+  {
+    name: 'Speaker',
+    title: 'Digital Marketing',
+    topic: 'Marketing'
+  }
+];
 
   const scheduleData = {
     'October 24': [
@@ -117,8 +113,11 @@ const Program = () => {
                   <p className="speaker-title">{speaker.title}</p>
                   <p className="speaker-company">{speaker.company}</p>
                   <div className="speaker-topic">
-                    <FaMapMarkerAlt className="topic-icon" />
+                    <FaMicrophone className="topic-icon" />
                     {speaker.topic}
+                  </div>
+                  <div className="speaker-expertise">
+                    {speaker.expertise}
                   </div>
                 </div>
               </div>

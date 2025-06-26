@@ -16,14 +16,7 @@ const CallForPapers = () => {
               alt="SITE 2025 Call for Papers" 
             />
           </div>
-          
-          <div className="download-section">
-            <h3>Call for papers</h3>
-            <a href="/checkout/call-for-paper-site2025-3/" className="btn btn-primary">
-              Download
-            </a>
           </div>
-        </div>
       </div>
     </div>
   )

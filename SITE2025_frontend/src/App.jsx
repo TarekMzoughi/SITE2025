@@ -34,6 +34,7 @@ function App() {
             <Route path="/venue" element={<Venue />} />
             <Route path="/call-for-papers" element={<CallForPapers />} />
             <Route path="/call-for-special-sessions" element={<CallForSpecialSessions />} />
+            <Route path="/submission" element={<SubmissionGuidelines />} />
             <Route path="/submission-guidelines" element={<SubmissionGuidelines />} />
             <Route path="/registration" element={<Registration />} />
             <Route path="/registration-form" element={<RegistrationForm />} />
