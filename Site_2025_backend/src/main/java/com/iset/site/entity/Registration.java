@@ -15,25 +15,39 @@ public class Registration {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
+    // Personal Information
     private String fullName;
     private String institution;
     private String position;
     private String email;
     private String phone;
-    
+
+    // Registration Details
+    private String participantCategory;
+    private boolean fromTunisia;
+    private boolean withAccommodation;
+    private boolean singleRoom;
     private boolean withArticle;
+    private boolean airportTransfer;
+    private boolean socialEvent;
+
+    // Accompanying Persons
     private boolean withAccompanying;
-    
+
     @ElementCollection
     private List<String> accompanyingPersons;
-    
+
+    // Fee Calculation
+    private String currency;
+
+    // Payment Information
     private String paymentMethod;
-    private boolean withAccommodation;
     private double paymentAmount;
     private String paymentProofPath;
-    
+
     // Getters and Setters
+
     public Long getId() {
         return id;
     }
@@ -82,12 +96,60 @@ public class Registration {
         this.phone = phone;
     }
 
+    public String getParticipantCategory() {
+        return participantCategory;
+    }
+
+    public void setParticipantCategory(String participantCategory) {
+        this.participantCategory = participantCategory;
+    }
+
+    public boolean isFromTunisia() {
+        return fromTunisia;
+    }
+
+    public void setFromTunisia(boolean fromTunisia) {
+        this.fromTunisia = fromTunisia;
+    }
+
+    public boolean isWithAccommodation() {
+        return withAccommodation;
+    }
+
+    public void setWithAccommodation(boolean withAccommodation) {
+        this.withAccommodation = withAccommodation;
+    }
+
+    public boolean isSingleRoom() {
+        return singleRoom;
+    }
+
+    public void setSingleRoom(boolean singleRoom) {
+        this.singleRoom = singleRoom;
+    }
+
     public boolean isWithArticle() {
         return withArticle;
     }
 
     public void setWithArticle(boolean withArticle) {
         this.withArticle = withArticle;
+    }
+
+    public boolean isAirportTransfer() {
+        return airportTransfer;
+    }
+
+    public void setAirportTransfer(boolean airportTransfer) {
+        this.airportTransfer = airportTransfer;
+    }
+
+    public boolean isSocialEvent() {
+        return socialEvent;
+    }
+
+    public void setSocialEvent(boolean socialEvent) {
+        this.socialEvent = socialEvent;
     }
 
     public boolean isWithAccompanying() {
@@ -106,20 +168,21 @@ public class Registration {
         this.accompanyingPersons = accompanyingPersons;
     }
 
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
     public String getPaymentMethod() {
         return paymentMethod;
     }
 
     public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
-    }
-
-    public boolean isWithAccommodation() {
-        return withAccommodation;
-    }
-
-    public void setWithAccommodation(boolean withAccommodation) {
-        this.withAccommodation = withAccommodation;
     }
 
     public double getPaymentAmount() {
