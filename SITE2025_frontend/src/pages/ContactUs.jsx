@@ -3,8 +3,8 @@ import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaFacebook, FaLinkedin, FaGlobe } 
 
 const ContactUs = () => {
   return (
-    <div  className="page-container">
-      <div  className="container">
+    <div style={styles.pageContainer}>
+      <div style={styles.container}>
         <div className="page-header">
           <h1>Contact Us</h1>
           
