@@ -10,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/sessions")
+@CrossOrigin(origins = {"http://localhost:5173", "http://localhost:3000"})
 public class ProgramSessionController {
 
     private final ProgramSessionService sessionService;

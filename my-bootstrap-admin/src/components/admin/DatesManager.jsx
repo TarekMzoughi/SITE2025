@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAppData } from '../../context/AppDataContext';
 import { Card, ListGroup, Button, Form, Col, Row, Alert, Badge } from 'react-bootstrap';
-import { Trash2, CalendarPlus, Save, Calendar, Clock, Plus, AlertCircle } from 'lucide-react';
+import { Trash2, CalendarPlus, Save, Calendar, Clock, Plus } from 'lucide-react';
 
 const DatesManager = () => {
   const { appData, updateData } = useAppData();

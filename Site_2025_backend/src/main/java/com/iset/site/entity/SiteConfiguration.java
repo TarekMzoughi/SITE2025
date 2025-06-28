@@ -58,4 +58,5 @@ public class SiteConfiguration {
     public void setRegistrationCloseDate(LocalDate registrationCloseDate) {
         this.registrationCloseDate = registrationCloseDate;
     }
+    
 }

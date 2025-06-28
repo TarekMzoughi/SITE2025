@@ -1,98 +1,280 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-
-// This data structure contains all the manageable content
-const initialData = {
-  // General Settings
-  siteName: "Admin CMS",
-  logoUrl: "/site-logo.png",
-
-  // Registration dates
-  registrationStartDate: "",
-  registrationEndDate: "",
-  speakers: [
-    { id: 1, name: 'Dr. Ada Lovelace', title: 'Chief Scientist', topic: 'The Future of Smart Industry' },
-    { id: 2, name: 'Prof. Charles Babbage', title: 'Professor', topic: 'Mechanical Engineering' },
-    { id: 3, name: 'Grace Hopper', title: 'Admiral', topic: 'Big Data & Security' },
-    { id: 4, name: 'Tim Berners-Lee', title: 'Director', topic: 'The Semantic Web' }
-  ],
-  schedule: {
-    'October 24': [
-      { id: 1, time: '08:30-09:00', event: 'Registration & Welcome Coffee' },
-      { id: 2, time: '09:00-09:30', event: 'Opening Ceremony' },
-      { id: 3, time: '09:30-10:30', event: 'Keynote: Future of Smart Industry' },
-    ],
-    'October 25': [
-      { id: 1, time: '09:00-10:00', event: 'Keynote: Sustainable Technology Solutions' },
-      { id: 2, time: '10:00-10:30', event: 'Coffee Break' },
-    ],
-    'October 26': [
-      { id: 1, time: '09:00-10:00', event: 'Keynote: Digital Transformation in Industry' },
-      { id: 2, time: '15:30-16:30', event: 'Closing Ceremony & Awards' },
-    ],
-    'Special Sessions': [
-      { id: 1, time: 'TBA', event: 'To be announced' },
-    ],
-  },
-  
-  // Dates (removed "important" status)
-  dates: [
-    { id: 1, date: 'July 30th, 2025', event: 'Paper Submission Deadline', description: 'Final deadline for all paper submissions', status: 'critical' },
-    { id: 2, date: 'September 15th, 2025', event: 'Acceptance Notification', description: 'Authors will be notified of paper acceptance', status: 'success' },
-    { id: 3, date: 'September 20th, 2025', event: 'Registration Deadline', description: 'Early bird registration closes', status: 'deadline' },
-    { id: 4, date: 'October 1st, 2025', event: 'Camera-Ready Submission', description: 'Final paper versions due', status: 'deadline' },
-  ]
-};
+import React, {
+  createContext,
+  useContext,
+  useReducer,
+  useEffect,
+  useCallback
+} from 'react';
+import ApiService from '../services/api';
 
 const AppDataContext = createContext();
 
+const initialState = {
+  siteName: '',
+  siteDescription: '',
+  logoPath: '',
+  registrationStartDate: '',
+  registrationEndDate: '',
+  eventDate: '',
+  location: '',
+  speakers: [],
+  sessions: [],
+  registrations: [],
+  loading: {
+    speakers: false,
+    sessions: false,
+    registrations: false,
+    config: false,
+  },
+  errors: {
+    speakers: null,
+    sessions: null,
+    registrations: null,
+    config: null,
+  }
+};
+
+function appDataReducer(state, action) {
+  switch (action.type) {
+    case 'SET_LOADING':
+      return {
+        ...state,
+        loading: { ...state.loading, [action.key]: action.value }
+      };
+    case 'SET_ERROR':
+      return {
+        ...state,
+        errors: { ...state.errors, [action.key]: action.value }
+      };
+    case 'SET_SITE_CONFIG':
+      return {
+        ...state,
+        siteName: action.config.siteName || '',
+        siteDescription: action.config.siteDescription || '',
+        logoPath: action.config.logoPath || '',
+        registrationStartDate: action.config.registrationStartDate || '',
+        registrationEndDate: action.config.registrationEndDate || '',
+        eventDate: action.config.eventDate || '',
+        location: action.config.location || '',
+      };
+    case 'SET_SPEAKERS':
+      return { ...state, speakers: action.speakers };
+    case 'ADD_SPEAKER':
+      return { ...state, speakers: [...state.speakers, action.speaker] };
+    case 'UPDATE_SPEAKER':
+      return {
+        ...state,
+        speakers: state.speakers.map(speaker =>
+          speaker.id === action.speaker.id ? action.speaker : speaker
+        )
+      };
+    case 'DELETE_SPEAKER':
+      return {
+        ...state,
+        speakers: state.speakers.filter(speaker => speaker.id !== action.id)
+      };
+    case 'SET_SESSIONS':
+      return { ...state, sessions: action.sessions };
+    case 'ADD_SESSION':
+      return { ...state, sessions: [...state.sessions, action.session] };
+    case 'UPDATE_SESSION':
+      return {
+        ...state,
+        sessions: state.sessions.map(session =>
+          session.id === action.session.id ? action.session : session
+        )
+      };
+    case 'DELETE_SESSION':
+      return {
+        ...state,
+        sessions: state.sessions.filter(session => session.id !== action.id)
+      };
+    case 'SET_REGISTRATIONS':
+      return { ...state, registrations: action.registrations };
+    case 'ADD_REGISTRATION':
+      return { ...state, registrations: [...state.registrations, action.registration] };
+    case 'UPDATE_REGISTRATION':
+      return {
+        ...state,
+        registrations: state.registrations.map(reg =>
+          reg.id === action.registration.id ? action.registration : reg
+        )
+      };
+    case 'DELETE_REGISTRATION':
+      return {
+        ...state,
+        registrations: state.registrations.filter(reg => reg.id !== action.id)
+      };
+    default:
+      return state;
+  }
+}
+
 export const AppDataProvider = ({ children }) => {
-  const [appData, setAppData] = useState(() => {
+  const [state, dispatch] = useReducer(appDataReducer, initialState);
+
+  const handleAsync = async (key, asyncFunction) => {
+    dispatch({ type: 'SET_LOADING', key, value: true });
+    dispatch({ type: 'SET_ERROR', key, value: null });
     try {
-      const savedData = localStorage.getItem('appData');
-      if (savedData) {
-        const parsedData = JSON.parse(savedData);
-        // Migration: if old data has importantDates but no dates, migrate it
-        if (parsedData.importantDates && !parsedData.dates) {
-          parsedData.dates = parsedData.importantDates;
-        }
-        // Ensure new fields exist
-        if (!parsedData.registrationStartDate) parsedData.registrationStartDate = '';
-        if (!parsedData.registrationEndDate) parsedData.registrationEndDate = '';
-        if (!parsedData.dates) parsedData.dates = [];
-        return parsedData;
-      }
-      return initialData;
+      const result = await asyncFunction();
+      return result;
     } catch (error) {
-      return initialData;
+      dispatch({ type: 'SET_ERROR', key, value: error.message });
+      throw error;
+    } finally {
+      dispatch({ type: 'SET_LOADING', key, value: false });
     }
-  });
+  };
 
-  useEffect(() => {
-    localStorage.setItem('appData', JSON.stringify(appData));
-  }, [appData]);
+  // ✅ useCallback hooks for stable dependencies
+  const loadSiteConfig = useCallback(async () => {
+    return handleAsync('config', async () => {
+      const config = await ApiService.getSiteConfig();
+      if (config) {
+        dispatch({ type: 'SET_SITE_CONFIG', config });
+      }
+      return config;
+    });
+  }, []);
 
-  const updateData = (key, value) => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        try {
-          setAppData(prevData => {
-            const newData = { ...prevData, [key]: value };
-            // Validate the data structure
-            if (typeof newData !== 'object' || newData === null) {
-              throw new Error('Invalid data structure');
-            }
-            return newData;
-          });
-          resolve();
-        } catch (error) {
-          console.error('Error updating data:', error);
-          reject(error);
-        }
-      }, 300);
+  const loadSpeakers = useCallback(async () => {
+    return handleAsync('speakers', async () => {
+      const speakers = await ApiService.getAllSpeakers();
+      dispatch({ type: 'SET_SPEAKERS', speakers });
+      return speakers;
+    });
+  }, []);
+
+  const loadSessions = useCallback(async () => {
+    return handleAsync('sessions', async () => {
+      const sessions = await ApiService.getAllSessions();
+      dispatch({ type: 'SET_SESSIONS', sessions });
+      return sessions;
+    });
+  }, []);
+
+  const loadRegistrations = useCallback(async () => {
+    return handleAsync('registrations', async () => {
+      const registrations = await ApiService.getAllRegistrations();
+      dispatch({ type: 'SET_REGISTRATIONS', registrations });
+      return registrations;
+    });
+  }, []);
+
+  // Non-critical ones (not needed in useEffect)
+  const updateSiteConfig = async (config, logoFile) => {
+    return handleAsync('config', async () => {
+      const updatedConfig = await ApiService.updateSiteConfig(config, logoFile);
+      dispatch({ type: 'SET_SITE_CONFIG', config: updatedConfig });
+      return updatedConfig;
     });
   };
 
-  const value = { appData, updateData };
+  const addSpeaker = async (speaker) => {
+    return handleAsync('speakers', async () => {
+      const newSpeaker = await ApiService.createSpeaker(speaker);
+      dispatch({ type: 'ADD_SPEAKER', speaker: newSpeaker });
+      return newSpeaker;
+    });
+  };
+
+  const updateSpeaker = async (id, speaker) => {
+    return handleAsync('speakers', async () => {
+      const updatedSpeaker = await ApiService.updateSpeaker(id, speaker);
+      dispatch({ type: 'UPDATE_SPEAKER', speaker: updatedSpeaker });
+      return updatedSpeaker;
+    });
+  };
+
+  const deleteSpeaker = async (id) => {
+    return handleAsync('speakers', async () => {
+      await ApiService.deleteSpeaker(id);
+      dispatch({ type: 'DELETE_SPEAKER', id });
+    });
+  };
+
+  const addSession = async (session) => {
+    return handleAsync('sessions', async () => {
+      const newSession = await ApiService.createSession(session);
+      dispatch({ type: 'ADD_SESSION', session: newSession });
+      return newSession;
+    });
+  };
+
+  const updateSession = async (id, session) => {
+    return handleAsync('sessions', async () => {
+      const updatedSession = await ApiService.updateSession(id, session);
+      dispatch({ type: 'UPDATE_SESSION', session: updatedSession });
+      return updatedSession;
+    });
+  };
+
+  const deleteSession = async (id) => {
+    return handleAsync('sessions', async () => {
+      await ApiService.deleteSession(id);
+      dispatch({ type: 'DELETE_SESSION', id });
+    });
+  };
+
+  const addRegistration = async (registration, paymentProofFile) => {
+    return handleAsync('registrations', async () => {
+      const newRegistration = await ApiService.createRegistration(registration, paymentProofFile);
+      dispatch({ type: 'ADD_REGISTRATION', registration: newRegistration });
+      return newRegistration;
+    });
+  };
+
+  const updateRegistration = async (id, registration) => {
+    return handleAsync('registrations', async () => {
+      const updatedRegistration = await ApiService.updateRegistration(id, registration);
+      dispatch({ type: 'UPDATE_REGISTRATION', registration: updatedRegistration });
+      return updatedRegistration;
+    });
+  };
+
+  const deleteRegistration = async (id) => {
+    return handleAsync('registrations', async () => {
+      await ApiService.deleteRegistration(id);
+      dispatch({ type: 'DELETE_REGISTRATION', id });
+    });
+  };
+
+  // ✅ useEffect with stable function references
+  useEffect(() => {
+    const loadInitialData = async () => {
+      try {
+        await Promise.allSettled([
+          loadSiteConfig(),
+          loadSpeakers(),
+          loadSessions(),
+          loadRegistrations(),
+        ]);
+      } catch (error) {
+        console.error('Failed to load initial data:', error);
+      }
+    };
+
+    loadInitialData();
+  }, [loadSiteConfig, loadSpeakers, loadSessions, loadRegistrations]);
+
+  const value = {
+    appData: state,
+    loadSiteConfig,
+    updateSiteConfig,
+    loadSpeakers,
+    addSpeaker,
+    updateSpeaker,
+    deleteSpeaker,
+    loadSessions,
+    addSession,
+    updateSession,
+    deleteSession,
+    loadRegistrations,
+    addRegistration,
+    updateRegistration,
+    deleteRegistration,
+  };
 
   return (
     <AppDataContext.Provider value={value}>

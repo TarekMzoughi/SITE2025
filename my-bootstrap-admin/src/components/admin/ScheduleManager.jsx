@@ -1,25 +1,27 @@
-// This manager is more advanced to handle adding/removing days and sessions
 import React, { useState, useEffect } from 'react';
 import { useAppData } from '../../context/AppDataContext';
-import { Card, ListGroup, Button, Form, Accordion, Alert, Badge, Row, Col } from 'react-bootstrap';
+import { Card, ListGroup, Button, Form, Accordion, Alert, Badge, Row, Col, Spinner } from 'react-bootstrap';
 import { Trash2, Save, PlusCircle, Calendar, Clock, Plus, CalendarDays } from 'lucide-react';
 
 const ScheduleManager = () => {
-  const { appData, updateData } = useAppData();
-  const [schedule, setSchedule] = useState(appData.schedule);
+  const { appData, isLoading, error: apiError, updateData } = useAppData();
+  const [schedule, setSchedule] = useState(appData?.schedule || {});
   const [newDay, setNewDay] = useState('');
   const [sessionInputs, setSessionInputs] = useState({});
-  const [error, setError] = useState('');
+  const [localError, setLocalError] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
 
   // Synchronize with context data
   useEffect(() => {
-    setSchedule(appData.schedule);
-  }, [appData.schedule]);
+    if (appData?.schedule) {
+      setSchedule(appData.schedule);
+    }
+  }, [appData?.schedule]);
 
   // Initialize session inputs for each day
   useEffect(() => {
     const inputs = {};
-    Object.keys(schedule).forEach(day => {
+    Object.keys(schedule || {}).forEach(day => {
       inputs[day] = { time: '', event: '' };
     });
     setSessionInputs(inputs);
@@ -28,13 +30,12 @@ const ScheduleManager = () => {
   const handleAddSession = (day) => {
     const sessionInput = sessionInputs[day];
     if (!sessionInput?.time || !sessionInput?.event) {
-      setError('Please fill in both time and event fields');
+      setLocalError('Please fill in both time and event fields');
       return;
     }
 
     const daySessions = schedule[day] || [];
-    // Better ID generation to avoid conflicts
-    const allIds = Object.values(schedule).flat().map(s => s.id);
+    const allIds = Object.values(schedule || {}).flat().map(s => s.id);
     const newId = allIds.length > 0 ? Math.max(...allIds) + 1 : 1;
 
     const updatedSessions = [...daySessions, {
@@ -44,29 +45,23 @@ const ScheduleManager = () => {
     }];
 
     setSchedule({ ...schedule, [day]: updatedSessions });
-
-    // Clear the input for this specific day
-    setSessionInputs(prev => ({
-      ...prev,
-      [day]: { time: '', event: '' }
-    }));
-
-    setError('');
+    setSessionInputs(prev => ({ ...prev, [day]: { time: '', event: '' } }));
+    setLocalError('');
   };
 
   const handleRemoveSession = (day, sessionId) => {
-    const updatedSessions = schedule[day].filter(s => s.id !== sessionId);
+    const updatedSessions = (schedule[day] || []).filter(s => s.id !== sessionId);
     setSchedule({ ...schedule, [day]: updatedSessions });
   };
 
   const handleAddDay = () => {
     if (!newDay.trim()) {
-      setError('Please enter a day name');
+      setLocalError('Please enter a day name');
       return;
     }
 
     if (schedule[newDay.trim()]) {
-      setError('This day already exists');
+      setLocalError('This day already exists');
       return;
     }
 
@@ -74,24 +69,50 @@ const ScheduleManager = () => {
     setSchedule({ ...schedule, [dayName]: [] });
     setSessionInputs(prev => ({ ...prev, [dayName]: { time: '', event: '' } }));
     setNewDay('');
-    setError('');
+    setLocalError('');
   };
 
   const handleSave = async () => {
+    setIsSaving(true);
     try {
       await updateData('schedule', schedule);
       alert('Schedule saved successfully!');
     } catch (error) {
-      alert('Error saving schedule. Please try again.');
+      setLocalError('Error saving schedule. Please try again.');
+    } finally {
+      setIsSaving(false);
     }
   };
 
   const updateSessionInput = (day, field, value) => {
     setSessionInputs(prev => ({
       ...prev,
-      [day]: { ...prev[day], [field]: value }
+      [day]: { ...(prev[day] || {}), [field]: value }
     }));
   };
+
+  if (isLoading) {
+    return (
+      <Card className="border-0 shadow-sm">
+        <Card.Body className="text-center py-5">
+          <Spinner animation="border" variant="primary" />
+          <p className="mt-3">Loading schedule data...</p>
+        </Card.Body>
+      </Card>
+    );
+  }
+
+  if (apiError) {
+    return (
+      <Card className="border-0 shadow-sm">
+        <Card.Body className="text-center py-5">
+          <Alert variant="danger">
+            Failed to load schedule data: {apiError.message}
+          </Alert>
+        </Card.Body>
+      </Card>
+    );
+  }
 
   return (
     <Card className="border-0 shadow-sm">
@@ -101,30 +122,28 @@ const ScheduleManager = () => {
           Program Schedule Management
         </div>
         <Badge bg="secondary" className="rounded-pill">
-          {Object.keys(schedule).length} days
+          {Object.keys(schedule || {}).length} days
         </Badge>
       </Card.Header>
 
       <Card.Body>
-        {error && <Alert variant="danger" className="mb-4">{error}</Alert>}
+        {(localError || apiError) && <Alert variant="danger" className="mb-4">{localError || apiError.message}</Alert>}
 
-        {/* Schedule Days */}
         <Accordion defaultActiveKey="0" className="mb-4">
-          {Object.entries(schedule).map(([day, sessions], index) => (
+          {Object.entries(schedule || {}).map(([day, sessions], index) => (
             <Accordion.Item eventKey={index.toString()} key={day} className="border rounded-3 mb-3">
               <Accordion.Header>
                 <div className="d-flex align-items-center w-100">
                   <Calendar size={18} className="me-2 text-primary" />
                   <span className="fw-semibold">{day}</span>
                   <Badge bg="primary" className="ms-auto me-3 rounded-pill">
-                    {sessions.length} session{sessions.length !== 1 ? 's' : ''}
+                    {(sessions || []).length} session{(sessions || []).length !== 1 ? 's' : ''}
                   </Badge>
                 </div>
               </Accordion.Header>
               <Accordion.Body>
-                {/* Sessions List */}
                 <ListGroup className="mb-4">
-                  {sessions.map((session) => (
+                  {(sessions || []).map((session) => (
                     <ListGroup.Item key={session.id} className="border-0 bg-light rounded-3 mb-2">
                       <Row className="align-items-center">
                         <Col>
@@ -152,7 +171,7 @@ const ScheduleManager = () => {
                       </Row>
                     </ListGroup.Item>
                   ))}
-                  {sessions.length === 0 && (
+                  {(sessions || []).length === 0 && (
                     <ListGroup.Item className="text-center text-muted border-0 bg-light rounded-3">
                       <Clock size={24} className="mb-2 opacity-50" />
                       <div>No sessions scheduled for this day</div>
@@ -161,7 +180,6 @@ const ScheduleManager = () => {
                   )}
                 </ListGroup>
 
-                {/* Add Session Form */}
                 <div className="border-top pt-3">
                   <h6 className="d-flex align-items-center mb-3">
                     <Plus size={16} className="me-2 text-success" />
@@ -171,14 +189,14 @@ const ScheduleManager = () => {
                     <Col md={4}>
                       <Form.Control
                         placeholder="Time (e.g., 10:00-11:00)"
-                        value={sessionInputs[day]?.time || ''}
+                        value={(sessionInputs[day] || {}).time || ''}
                         onChange={e => updateSessionInput(day, 'time', e.target.value)}
                       />
                     </Col>
                     <Col md={6}>
                       <Form.Control
                         placeholder="Event Name"
-                        value={sessionInputs[day]?.event || ''}
+                        value={(sessionInputs[day] || {}).event || ''}
                         onChange={e => updateSessionInput(day, 'event', e.target.value)}
                       />
                     </Col>
@@ -187,7 +205,7 @@ const ScheduleManager = () => {
                         variant="success"
                         className="w-100"
                         onClick={() => handleAddSession(day)}
-                        disabled={!sessionInputs[day]?.time || !sessionInputs[day]?.event}
+                        disabled={!(sessionInputs[day]?.time) || !(sessionInputs[day]?.event)}
                       >
                         <Plus size={16} />
                       </Button>
@@ -199,7 +217,6 @@ const ScheduleManager = () => {
           ))}
         </Accordion>
 
-        {/* Add New Day */}
         <div className="border-top pt-4">
           <h6 className="d-flex align-items-center mb-3">
             <PlusCircle size={16} className="me-2 text-info" />
@@ -230,11 +247,20 @@ const ScheduleManager = () => {
 
       <Card.Footer className="d-flex justify-content-between align-items-center">
         <small className="text-muted">
-          {Object.keys(schedule).length} day{Object.keys(schedule).length !== 1 ? 's' : ''} with {Object.values(schedule).flat().length} total sessions
+          {Object.keys(schedule || {}).length} day{Object.keys(schedule || {}).length !== 1 ? 's' : ''} with {Object.values(schedule || {}).flat().length} total sessions
         </small>
-        <Button variant="primary" onClick={handleSave} className="px-4">
-          <Save size={16} className="me-2"/>
-          Save Schedule
+        <Button variant="primary" onClick={handleSave} className="px-4" disabled={isSaving}>
+          {isSaving ? (
+            <>
+              <Spinner as="span" animation="border" size="sm" className="me-2" />
+              Saving...
+            </>
+          ) : (
+            <>
+              <Save size={16} className="me-2"/>
+              Save Schedule
+            </>
+          )}
         </Button>
       </Card.Footer>
     </Card>

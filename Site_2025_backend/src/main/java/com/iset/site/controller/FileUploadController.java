@@ -13,7 +13,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
-@CrossOrigin(origins = "*")
+
 @RestController
 public class FileUploadController {
     private static final String UPLOAD_DIR = "uploads/";
