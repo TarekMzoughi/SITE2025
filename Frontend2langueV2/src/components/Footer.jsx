@@ -2,19 +2,26 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import { FaFacebook, FaLinkedin, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa'
 import { useLanguage } from '../contexts/LanguageContext'
+import { useConfig } from '../contexts/ConfigContext'
 import './Footer.css'
 
 const Footer = () => {
   const { t } = useLanguage()
+  const { config, loading } = useConfig()
+
+  // Show loading or default content while config is loading
+  if (loading) {
+    return <div className="footer-loading">Loading...</div>
+  }
 
   return (
     <footer className="footer">
       <div className="container">
         <div className="footer-content">
           <div className="footer-section">
-            <h3>SITE 2025</h3>
+            <h3>{config?.site?.title || 'SITE 2025'}</h3>
             <p>
-              {t('footer.description')}
+              {config?.site?.description || t('footer.description')}
             </p>
           </div>
 
@@ -44,23 +51,35 @@ const Footer = () => {
             <div className="contact-info">
               <div className="contact-item">
                 <FaMapMarkerAlt />
-                <span>{t('footer.address')}</span>
+                <span>{config?.contact?.address || t('footer.address')}</span>
               </div>
               <div className="contact-item">
                 <FaPhone />
-                <a href={`tel:${t('footer.contact.phone')}`}>{t('footer.contact.phone')}</a>
+                <a href={`tel:${config?.contact?.phone || t('footer.contact.phone')}`}>
+                  {config?.contact?.phone || t('footer.contact.phone')}
+                </a>
               </div>
               <div className="contact-item">
                 <FaEnvelope />
-                <a href={`mailto:${t('footer.contact.email')}`}>{t('footer.contact.email')}</a>
+                <a href={`mailto:${config?.contact?.email || t('footer.contact.email')}`}>
+                  {config?.contact?.email || t('footer.contact.email')}
+                </a>
               </div>
             </div>
             
             <div className="social-links">
-              <a href="https://www.facebook.com/profile.php?id=100090234982911" target="_blank" rel="noopener noreferrer">
+              <a 
+                href={config?.social?.facebook || "https://www.facebook.com/profile.php?id=100090234982911"} 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
                 <FaFacebook />
               </a>
-              <a href="https://www.linkedin.com/company/107036663/admin/dashboard/" target="_blank" rel="noopener noreferrer">
+              <a 
+                href={config?.social?.linkedin || "https://www.linkedin.com/company/107036663/admin/dashboard/"} 
+                target="_blank" 
+                rel="noopener noreferrer"
+              >
                 <FaLinkedin />
               </a>
             </div>
@@ -69,8 +88,8 @@ const Footer = () => {
 
         <div className="footer-bottom">
           <p>
-            {t('footer.copyright', { siteName: 'SITE2025' })}
-            </p>
+            {t('footer.copyright', { siteName: config?.site?.title || 'SITE2025' })}
+          </p>
         </div>
       </div>
     </footer>

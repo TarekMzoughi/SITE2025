@@ -1,5 +1,5 @@
 
-const BASE_URL = 'http://localhost:8084/api/public';
+const BASE_URL = 'http://localhost:8083/api/public';
 
 class MainApiService {
   constructor() {
@@ -59,7 +59,7 @@ class MainApiService {
       formData.append('registration', JSON.stringify(registration));
       formData.append('paymentProof', paymentProofFile);
 
-      return fetch(`http://localhost:8084/api/registrations`, {
+      return fetch(`http://localhost:8083/api/registrations`, {
         method: 'POST',
         body: formData,
       }).then(response => {

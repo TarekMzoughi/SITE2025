@@ -160,7 +160,7 @@ const useRegistrationForm = () => {
         formDataToSend.append('paymentProof', formData.paymentProofPath)
       }
       
-      // Send to backend
+      // Send to backend - FIXED PORT NUMBER
       const response = await fetch('http://localhost:8083/api/registrations', {
         method: 'POST',
         body: formDataToSend,
@@ -168,6 +168,9 @@ const useRegistrationForm = () => {
       })
       
       if (!response.ok) {
+        // Get error details from response
+        const errorText = await response.text()
+        console.error('Server error:', errorText)
         throw new Error(`HTTP error! status: ${response.status}`)
       }
       
@@ -179,7 +182,15 @@ const useRegistrationForm = () => {
       
     } catch (error) {
       console.error('Registration error:', error)
-      alert('There was an error submitting your registration. Please try again.')
+      
+      // More detailed error message
+      if (error.message.includes('Failed to fetch')) {
+        alert('Unable to connect to the server. Please check if the backend is running on port 8084.')
+      } else if (error.message.includes('500')) {
+        alert('Server error occurred. Please check the backend logs and try again.')
+      } else {
+        alert('There was an error submitting your registration. Please try again.')
+      }
     } finally {
       setIsSubmitting(false)
     }

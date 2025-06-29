@@ -161,7 +161,7 @@ const useRegistrationForm = () => {
       }
       
       // Send to backend - FIXED PORT NUMBER
-      const response = await fetch('http://localhost:8084/api/registrations', {
+      const response = await fetch('http://localhost:8083/api/registrations', {
         method: 'POST',
         body: formDataToSend,
         // Don't set Content-Type header, let browser set it for FormData

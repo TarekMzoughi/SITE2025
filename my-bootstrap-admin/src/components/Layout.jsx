@@ -18,7 +18,7 @@ const Layout = () => {
               <Shield size={24} className="text-primary" />
             </div>
             <div>
-              <div className="fw-bold">{appData.siteName}</div>
+              <div className="fw-bold">{appData.websiteName}</div>
               <small className="text-light opacity-75">Content Management System</small>
             </div>
           </Navbar.Brand>

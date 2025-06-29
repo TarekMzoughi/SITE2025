@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -23,7 +25,16 @@ public class SiteConfigurationService {
     }
 
     public SiteConfiguration getConfig() {
-        return configRepository.findAll().stream().findFirst().orElse(null);
+        List<SiteConfiguration> configs = configRepository.findAll();
+        if (configs.isEmpty()) {
+            // Return a default configuration instead of null
+            SiteConfiguration defaultConfig = new SiteConfiguration();
+            defaultConfig.setWebsiteName("Default Site Name");
+            defaultConfig.setRegistrationOpenDate(LocalDate.now());
+            defaultConfig.setRegistrationCloseDate(LocalDate.now().plusDays(30));
+            return defaultConfig;
+        }
+        return configs.get(0);
     }
 
     public SiteConfiguration updateConfig(SiteConfiguration updatedConfig, MultipartFile logoFile) throws IOException {

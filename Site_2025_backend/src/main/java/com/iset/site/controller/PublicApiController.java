@@ -158,4 +158,43 @@ public class PublicApiController {
         
         return !now.isBefore(startDate) && !now.isAfter(endDate);
     }
+    
+ // Add this to your PublicApiController.java for debugging
+    @GetMapping("/debug-config")
+    public ResponseEntity<Map<String, Object>> debugConfig() {
+        Map<String, Object> debug = new HashMap<>();
+        
+        try {
+            SiteConfiguration config = configService.getConfig();
+            debug.put("configExists", config != null);
+            debug.put("config", config);
+            
+            if (config == null) {
+                debug.put("message", "No configuration found in database");
+                debug.put("suggestion", "Create a default configuration first");
+            }
+            
+        } catch (Exception e) {
+            debug.put("error", e.getMessage());
+            debug.put("stackTrace", e.getStackTrace());
+        }
+        
+        return ResponseEntity.ok(debug);
+    }
+
+    // Also add this method to create a default config if none exists
+    @PostMapping("/create-default-config")
+    public ResponseEntity<SiteConfiguration> createDefaultConfig() {
+        SiteConfiguration defaultConfig = new SiteConfiguration();
+        defaultConfig.setWebsiteName("My Conference Site");
+        defaultConfig.setRegistrationOpenDate(LocalDate.now());
+        defaultConfig.setRegistrationCloseDate(LocalDate.now().plusDays(30));
+        
+        try {
+            SiteConfiguration saved = configService.updateConfig(defaultConfig, null);
+            return ResponseEntity.ok(saved);
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+    }
 }

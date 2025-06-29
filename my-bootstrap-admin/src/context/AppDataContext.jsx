@@ -10,11 +10,10 @@ import ApiService from '../services/api';
 const AppDataContext = createContext();
 
 const initialState = {
-  siteName: '',
-  siteDescription: '',
+  websiteName: '',
   logoPath: '',
-  registrationStartDate: '',
-  registrationEndDate: '',
+  registrationOpenDate: '',  
+  registrationCloseDate: '',
   eventDate: '',
   location: '',
   speakers: [],
@@ -49,11 +48,10 @@ function appDataReducer(state, action) {
     case 'SET_SITE_CONFIG':
       return {
         ...state,
-        siteName: action.config.siteName || '',
-        siteDescription: action.config.siteDescription || '',
+        websiteName: action.config.websiteName || '',
         logoPath: action.config.logoPath || '',
-        registrationStartDate: action.config.registrationStartDate || '',
-        registrationEndDate: action.config.registrationEndDate || '',
+        registrationOpenDate: action.config.registrationOpenDate || '',
+        registrationCloseDate: action.config.registrationCloseDate || '',
         eventDate: action.config.eventDate || '',
         location: action.config.location || '',
       };
@@ -172,12 +170,13 @@ export const AppDataProvider = ({ children }) => {
   };
 
   const addSpeaker = async (speaker) => {
-    return handleAsync('speakers', async () => {
-      const newSpeaker = await ApiService.createSpeaker(speaker);
-      dispatch({ type: 'ADD_SPEAKER', speaker: newSpeaker });
-      return newSpeaker;
-    });
-  };
+  return handleAsync('speakers', async () => {
+    const newSpeaker = await ApiService.createSpeaker(speaker);
+    dispatch({ type: 'ADD_SPEAKER', speaker: newSpeaker });
+    return newSpeaker;
+  });
+};
+
 
   const updateSpeaker = async (id, speaker) => {
     return handleAsync('speakers', async () => {

@@ -1,5 +1,5 @@
 // src/services/api.js
-const BASE_URL = 'http://localhost:8084';
+const BASE_URL = 'http://localhost:8083';
 
 class ApiService {
   constructor() {
@@ -51,7 +51,7 @@ class ApiService {
     return this.request('/api/config', {
       method: 'PUT',
       body: formData,
-      headers: {}, // Let browser set Content-Type for FormData
+      headers: {},
     });
   }
 

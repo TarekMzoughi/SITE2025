@@ -23,12 +23,16 @@ import Authors from './pages/Authors'
 import HonoraryCommittee from './pages/HonoraryCommittee'
 import NotFound from './pages/NotFound'
 import './App.css'
+import { ConfigProvider } from './contexts/ConfigContext'
+import { useRealTimeUpdates } from './hooks/useRealTimeUpdates'
 
 
 function App() {
+  useRealTimeUpdates();
   return (
     <LanguageProvider>
       <LanguageLoader>
+        <ConfigProvider>
         <Router>
           <div className="App">
             <Header />
@@ -58,6 +62,7 @@ function App() {
             <Footer />
           </div>
         </Router>
+        </ConfigProvider>
       </LanguageLoader>
     </LanguageProvider>
   )

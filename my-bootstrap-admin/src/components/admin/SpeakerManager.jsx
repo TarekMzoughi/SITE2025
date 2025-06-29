@@ -1,63 +1,71 @@
 import React, { useState, useEffect } from 'react';
 import { useAppData } from '../../context/AppDataContext';
 import { Card, ListGroup, Button, Form, Alert, Badge, Row, Col } from 'react-bootstrap';
-import { Trash2, UserPlus, Save, Users, User, Mic, Plus } from 'lucide-react';
+import { Trash2, UserPlus, Users, User, Mic, Plus } from 'lucide-react';
+import NotificationModal from '../common/NotificationModal';
 
 const SpeakerManager = () => {
-  const { appData, updateData } = useAppData();
+  const { appData, addSpeaker, deleteSpeaker } = useAppData();
   const [speakers, setSpeakers] = useState(appData.speakers);
-  const [newSpeaker, setNewSpeaker] = useState({ name: '', title: '', topic: '' });
+  const [newSpeaker, setNewSpeaker] = useState({ name: '', title: '', expertise: '' });
   const [error, setError] = useState('');
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [speakerToDelete, setSpeakerToDelete] = useState(null);
 
-  // Synchronize with context data
   useEffect(() => {
     setSpeakers(appData.speakers);
   }, [appData.speakers]);
 
-  const handleAdd = () => {
-    // Validation
+  const handleAdd = async () => {
     if (!newSpeaker.name.trim() || !newSpeaker.title.trim()) {
       setError('Name and title are required fields');
       return;
     }
 
-    // Check for duplicate names
     if (speakers.some(s => s.name.toLowerCase() === newSpeaker.name.trim().toLowerCase())) {
       setError('A speaker with this name already exists');
       return;
     }
 
-    // Better ID generation
-    const allIds = speakers.map(s => s.id);
-    const newId = allIds.length > 0 ? Math.max(...allIds) + 1 : 1;
-
-    const speakerToAdd = {
-      id: newId,
-      name: newSpeaker.name.trim(),
-      title: newSpeaker.title.trim(),
-      topic: newSpeaker.topic.trim()
-    };
-
-    setSpeakers([...speakers, speakerToAdd]);
-    setNewSpeaker({ name: '', title: '', topic: '' });
-    setError('');
-  };
-
-  const handleRemove = (id) => {
-    setSpeakers(speakers.filter(s => s.id !== id));
-  };
-
-  const handleSave = async () => {
     try {
-      await updateData('speakers', speakers);
-      alert('Speakers saved successfully!');
+      const speakerToAdd = {
+        name: newSpeaker.name.trim(),
+        title: newSpeaker.title.trim(),
+        expertise: newSpeaker.expertise.trim()
+      };
+
+      const createdSpeaker = await addSpeaker(speakerToAdd);
+      setSpeakers(prev => [...prev, createdSpeaker]);
+      setNewSpeaker({ name: '', title: '', expertise: '' });
+      setError('');
     } catch (error) {
-      alert('Error saving speakers. Please try again.');
+      setError('Failed to add speaker. Try again.');
+    }
+  };
+
+  const handleRemove = (speaker) => {
+    setSpeakerToDelete(speaker);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!speakerToDelete) return;
+
+    try {
+      await deleteSpeaker(speakerToDelete.id);
+      setSpeakers(prev => prev.filter(s => s.id !== speakerToDelete.id));
+      setError('');
+    } catch {
+      setError('Failed to delete speaker. Try again.');
+    } finally {
+      setShowDeleteModal(false);
+      setSpeakerToDelete(null);
     }
   };
 
   return (
-    <Card className="border-0 shadow-sm h-100">
+    <>
+      <Card className="border-0 shadow-sm h-100">
       <Card.Header className="d-flex align-items-center justify-content-between">
         <div className="d-flex align-items-center">
           <Users size={20} className="me-2" />
@@ -71,8 +79,7 @@ const SpeakerManager = () => {
       <Card.Body>
         {error && <Alert variant="danger" className="mb-4">{error}</Alert>}
 
-        {/* Speakers List */}
-        <div className="mb-4" style={{ maxHeight: '300px', overflowY: 'auto' }}>
+        <div className="mb-4">
           {speakers.length > 0 ? (
             <ListGroup className="list-group-flush">
               {speakers.map((s) => (
@@ -89,10 +96,10 @@ const SpeakerManager = () => {
                             <User size={14} className="me-1" />
                             {s.title}
                           </div>
-                          {s.topic && (
+                          {s.expertise && (
                             <div className="d-flex align-items-center text-primary small">
                               <Mic size={14} className="me-1" />
-                              {s.topic}
+                              {s.expertise}
                             </div>
                           )}
                         </div>
@@ -102,7 +109,7 @@ const SpeakerManager = () => {
                       <Button
                         variant="link"
                         size="sm"
-                        onClick={() => handleRemove(s.id)}
+                        onClick={() => handleRemove(s)}
                         className="text-danger p-1"
                         title="Delete speaker"
                       >
@@ -122,7 +129,6 @@ const SpeakerManager = () => {
           )}
         </div>
 
-        {/* Add New Speaker Form */}
         <div className="border-top pt-4">
           <h6 className="d-flex align-items-center mb-3">
             <Plus size={16} className="me-2 text-success" />
@@ -134,7 +140,7 @@ const SpeakerManager = () => {
               <Form.Control
                 placeholder="Full Name *"
                 value={newSpeaker.name}
-                onChange={e => setNewSpeaker({...newSpeaker, name: e.target.value})}
+                onChange={e => setNewSpeaker({ ...newSpeaker, name: e.target.value })}
                 className="mb-2"
               />
             </Col>
@@ -142,15 +148,15 @@ const SpeakerManager = () => {
               <Form.Control
                 placeholder="Title/Position *"
                 value={newSpeaker.title}
-                onChange={e => setNewSpeaker({...newSpeaker, title: e.target.value})}
+                onChange={e => setNewSpeaker({ ...newSpeaker, title: e.target.value })}
                 className="mb-2"
               />
             </Col>
             <Col md={12}>
               <Form.Control
-                placeholder="Speaking Topic"
-                value={newSpeaker.topic}
-                onChange={e => setNewSpeaker({...newSpeaker, topic: e.target.value})}
+                placeholder="Expertise / Topic"
+                value={newSpeaker.expertise}
+                onChange={e => setNewSpeaker({ ...newSpeaker, expertise: e.target.value })}
                 className="mb-2"
               />
             </Col>
@@ -167,17 +173,23 @@ const SpeakerManager = () => {
           </Button>
         </div>
       </Card.Body>
+      </Card>
 
-      <Card.Footer className="d-flex justify-content-between align-items-center">
-        <small className="text-muted">
-          {speakers.length} speaker{speakers.length !== 1 ? 's' : ''} configured
-        </small>
-        <Button variant="primary" onClick={handleSave} className="px-4">
-          <Save size={16} className="me-2"/>
-          Save Changes
-        </Button>
-      </Card.Footer>
-    </Card>
+      <NotificationModal
+        show={showDeleteModal}
+        onHide={() => {
+          setShowDeleteModal(false);
+          setSpeakerToDelete(null);
+        }}
+        title="Confirm Delete"
+        message={`Are you sure you want to delete the speaker "${speakerToDelete?.name}"? This action cannot be undone.`}
+        type="warning"
+        onConfirm={confirmDelete}
+        confirmText="Delete"
+        confirmVariant="danger"
+      />
+    </>
   );
 };
+
 export default SpeakerManager;

@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useLanguage } from '../contexts/LanguageContext'
+import { useConfig } from '../contexts/ConfigContext'
 import ParticleBackground from './ParticleBackground'
 import './HeroSlider.css'
 
 const HeroSlider = () => {
   const { t } = useLanguage()
+  const { config, loading } = useConfig()
   const [currentSlide, setCurrentSlide] = useState(0)
 
-  const slides = [
+  // Default slides with fallback values
+  const getSlides = () => [
     {
       id: 1,
       title: t('hero.slides.slide1.title'),
@@ -47,6 +50,8 @@ const HeroSlider = () => {
     }
   ]
 
+  const slides = getSlides()
+
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length)
@@ -57,6 +62,19 @@ const HeroSlider = () => {
 
   const goToSlide = (index) => {
     setCurrentSlide(index)
+  }
+
+  // Apply dynamic conference dates if available
+  const getConferenceYear = () => {
+    if (config?.dates?.conferenceStart) {
+      return new Date(config.dates.conferenceStart).getFullYear()
+    }
+    return 2025
+  }
+
+  // Show loading while config is loading
+  if (loading) {
+    return <div className="hero-loading">Loading conference information...</div>
   }
 
   return (
@@ -112,9 +130,22 @@ const HeroSlider = () => {
                   </div>
                   <h1 className="slide-title">
                     <span className="title-main">{slide.subtitle}</span>
-                    <span className="title-year">2025</span>
+                    {/* Use dynamic year from config */}
+                    <span className="title-year">{getConferenceYear()}</span>
                   </h1>
                   <p className="slide-description">{slide.description}</p>
+                  
+                  {/* Show conference dates if available */}
+                  {config?.dates?.conferenceStart && config?.dates?.conferenceEnd && (
+                    <div className="conference-dates">
+                      <span className="dates-icon">📅</span>
+                      <span className="dates-text">
+                        {new Date(config.dates.conferenceStart).toLocaleDateString()} - 
+                        {new Date(config.dates.conferenceEnd).toLocaleDateString()}
+                      </span>
+                    </div>
+                  )}
+                  
                   <div className="slide-highlight">
                     <span className="highlight-icon">✨</span>
                     <span className="highlight-text">{slide.highlight}</span>
